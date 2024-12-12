@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Header } from "./components/Navbar";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -54,6 +56,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* <div className="fixed bottom-4 right-4 z-50">
+            <ModeToggle />
+          </div> */}
           {children}
         </ThemeProvider>
       </body>

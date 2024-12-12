@@ -4,11 +4,14 @@ import { useCallback, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, X } from 'lucide-react'
 import Image from "next/image"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
+import {  saveUserData } from "@/lib/firebase/firebaseDb"
+import { auth } from "@/lib/firebase/config"
+import { useRouter } from "next/navigation"
 
 interface Step {
     title: string
@@ -52,32 +55,59 @@ const steps: Step[] = [
 
 export default function OnboardingForm() {
     const [currentStep, setCurrentStep] = useState(0)
-    const [heightUnit, setHeightUnit] = useState("cm")
-    const [heightCm, setHeightCm] = useState(168)
-    const [heightFeet, setHeightFeet] = useState(5)
-    const [heightInches, setHeightInches] = useState(6)
+    const [heightUnit, setHeightUnit] = useState("cm");
+    const [heightCm, setHeightCm] = useState(0);
+    const [heightFeet, setHeightFeet] = useState(0);
+    const [heightInches, setHeightInches] = useState(0);
     const [mounted, setMounted] = useState(false)
-    const [age, setAge] = useState(10)
+    const [age, setAge] = useState(0)
     const [trainingLevel, setTrainingLevel] = useState("")
-    const [activity, setActivity] = useState("")
+    const [activities, setActivities] = useState<string[]>([])
     const [gender, setGender] = useState("")
     const [mainGoal, setMainGoal] = useState("")
-    const [weight, setWeight] = useState(60)
+    const [weight, setWeight] = useState(0);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const calculateBMI = useCallback(() => {
-        if (heightUnit === "cm") {
-            return (weight / Math.pow(heightCm / 100, 2)).toFixed(1)
+    const router = useRouter()
+    const calculateBMI = useCallback((): number => {
+        if (!weight || weight <= 0) return 0;
+
+        let heightInMeters: number;
+
+        if (heightUnit === "cm" && heightCm && heightCm > 0) {
+            heightInMeters = heightCm / 100;
+        } else if (heightUnit === "feet" && heightFeet && heightInches && heightFeet > 0) {
+            heightInMeters = ((heightFeet * 12 + (heightInches || 0)) * 2.54) / 100;
         } else {
-            const heightInMeters = ((heightFeet * 12 + heightInches) * 2.54) / 100
-            return (weight / Math.pow(heightInMeters, 2)).toFixed(1)
+            return 0;
         }
-    }, [weight, heightUnit, heightCm, heightFeet, heightInches])
 
-    const handleNext = () => {
-        if (currentStep < steps.length - 1) {
-            setCurrentStep(currentStep + 1)
+        const bmi = weight / Math.pow(heightInMeters, 2);
+        return Number(bmi.toFixed(1));
+    }, [weight, heightUnit, heightCm, heightFeet, heightInches]);
+
+    const getBMICategory = (bmi: number): string => {
+        if (bmi < 18.5) return "underweight";
+        if (bmi < 25) return "normal";
+        if (bmi < 30) return "overweight";
+        return "obese";
+    };
+
+   const getBMIAdvice = (category: string): string => {
+        switch (category) {
+            case "underweight":
+                return "Consider increasing your calorie intake with nutrient-dense foods and incorporate strength training exercises to build muscle mass.";
+            case "normal":
+                return "Maintain your current healthy lifestyle with a balanced diet and regular exercise.";
+            case "overweight":
+                return "Focus on a balanced diet with portion control and increase your physical activity, aiming for at least 150 minutes of moderate exercise per week.";
+            case "obese":
+                return "Consult with a healthcare professional for personalized advice. Consider adopting a calorie-controlled diet and gradually increasing your physical activity level.";
+            default:
+                return "";
         }
-    }
+    };
+
 
     const handleBack = () => {
         if (currentStep > 0) {
@@ -90,11 +120,108 @@ export default function OnboardingForm() {
     }, [])
 
     if (!mounted) return null
+    const handleNext = () => {
+        let isValid = true;
+        setErrorMessage("");
 
+        switch (currentStep) {
+            case 0:
+                if (!gender) {
+                    setErrorMessage("Please choose your gender before continuing.");
+                    isValid = false;
+                }
+                break;
+            case 1:
+                if (!mainGoal) {
+                    setErrorMessage("Please choose your main goal before continuing.");
+                    isValid = false;
+                }
+                break;
+            case 2:
+                if (!age || age < 18 || age > 100) {
+                    setErrorMessage("Please enter a valid age between 18 and 100.");
+                    isValid = false;
+                }
+                break;
+            case 3:
+                if (heightUnit === "cm" ? !heightCm : (!heightFeet || !heightInches)) {
+                    setErrorMessage("Please enter your height before continuing.");
+                    isValid = false;
+                }
+                break;
+            case 4:
+                if (!weight || weight <= 0) {
+                    setErrorMessage("Please enter a valid weight before continuing.");
+                    isValid = false;
+                }
+                break;
+            case 5:
+                if (!trainingLevel) {
+                    setErrorMessage("Please choose your training level before continuing.");
+                    isValid = false;
+                }
+                break;
+            case 6:
+                if (activities.length === 0) {
+                    setErrorMessage("Please choose at least one activity that interests you.");
+                    isValid = false;
+                }
+                break;
+        }
+
+        if (isValid && currentStep < steps.length - 1) {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (!auth.currentUser) {
+            setErrorMessage("Please sign in to save your data");
+            return;
+        }
+
+        const bmiValue = calculateBMI();
+        const bmiCategory = getBMICategory(Number(bmiValue));
+
+        try {
+            // Create base activity data
+            const baseUserData = {
+                gender,
+                mainGoal,
+                age,
+                heightUnit,
+                weight,
+                trainingLevel,
+                activities,
+                bmi: bmiValue,
+                bmiCategory,
+                timestamp: new Date()
+            };
+
+            // Add height measurements based on the selected unit
+            const heightData = heightUnit === 'cm'
+                ? { heightCm }
+                : { heightFeet, heightInches };
+
+            // Combine and clean the data
+            const UserData = {
+                ...baseUserData,
+                ...heightData
+            };
+
+            await saveUserData(UserData);
+            console.log("Workout plan generated successfully!");
+            
+
+        } catch (error) {
+            console.error("Submission error:", error);
+            setErrorMessage("An error occurred. Please try again.");
+        }
+    };
     return (
-        <div className="min-h-screen w-full flex flex-col lg:flex-row dark:bg-gray-900">
+        <div className="min-h-screen w-full flex flex-col md:flex-row dark:bg-gray-900">
             {/* Left section - Image carousel */}
-            <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+            <div className="hidden md:block md:w-1/2 relative overflow-hidden">
                 <Image
                     src={steps[currentStep].image}
                     alt="Fitness"
@@ -108,18 +235,41 @@ export default function OnboardingForm() {
                         alt="Fitness-club"
                         width={100}
                         height={60}
-                        className="h-[53px] w-16 mb-0 mt-8 ml-12"
+                        className="h-24 w-32 mb-0 mt-8 ml-12"
                     />
-                    <span className="text-[#288cbe] italic font-extrabold font-serif mt-8 text-3xl">Fitness Club</span>
+
                 </div>
             </div>
 
             {/* Right section - form */}
-            <div className="flex-1 flex items-center justify-center px-8 -mt-32 max-sm:mt-0 overflow-y-auto">
-                <div className="w-full max-w-md space-y-4">
+            <div className="flex-1 flex mt-10 max-md:mt-0 items-baseline  justify-center px-4 sm:px-8 py-2 md:py-0 overflow-y-auto">
+
+                {errorMessage && (
+                    <div className="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded flex items-center justify-between" role="alert">
+                        <span className="block text-sm sm:inline">{errorMessage}</span>
+                        <button
+                            onClick={() => setErrorMessage("")}
+                            className="text-red-700 hover:text-red-900 ml-1"
+                        >
+                            <X size={12} />
+                            <span className="sr-only">Close</span>
+                        </button>
+                    </div>
+                )}
+                <div className="w-full max-w-md space-y-4 ">
                     <div className="space-y-2">
-                        <div className="mb-0 -mt-4 text-center">
-                            <div className="flex justify-between">
+                        <div className="mb-0  text-center">
+                            <div className=" md:hidden block z-30 justify-between items-center">
+                                <Image
+                                    src="/img/logo.png"
+                                    alt="Fitness-club"
+                                    width={100}
+                                    height={60}
+                                    className="h-24 w-32 mb-0 "
+                                />
+
+                            </div>
+                            <div className="flex justify-between items-baseline mt-2">
                                 <Button
                                     variant="ghost"
                                     size="icon"
@@ -129,10 +279,10 @@ export default function OnboardingForm() {
                                 >
                                     <ArrowLeft className="h-4 w-4" />
                                 </Button>
-                                <span className="text-sm font-semibold mt-2 text-gray-500 dark:text-white">
+                                <span className="text-sm font-semibold mt-2 text-gray-700 dark:text-white">
                                     Step {currentStep + 1} of {steps.length - 1}
                                 </span>
-                                <span className="mt-1 text-gray-500 bg-transparent border-none dark:text-gray-400">Skip</span>
+                                <span className="mt-1 text-gray-500 invisible bg-transparent border-none dark:text-gray-400">Skip</span>
                             </div>
                             <div className="max-w-[20rem] mx-auto">
                                 {currentStep === 0 && (
@@ -344,61 +494,33 @@ export default function OnboardingForm() {
                                             Choose Activities that Interest You
                                         </h1>
                                         <div className="gap-4 space-y-2">
-                                            <Label
-                                                htmlFor="cardio"
-                                                className={`flex justify-between gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 
-                                                      ${activity === "cardio" ? "border-sky-600 dark:border-sky-500" : "border-gray-300 dark:border-gray-700"}`}
-                                            >
-                                                <span className="text-base font-semibold flex">
-                                                    <span className="px-1 bg-gradient-to-r rounded-md to-sky-600 from-teal-500 mr-2">🏃‍♂️‍➡️</span>
-                                                    Cardio
-                                                </span>
-                                                <Checkbox id="cardio" className="mt-1" />
-                                            </Label>
-                                            <Label
-                                                htmlFor="power_training"
-                                                className={`flex justify-between gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 
-                                                      ${activity === "power_training" ? "border-sky-600 dark:border-sky-500" : "border-gray-300 dark:border-gray-700"}`}
-                                            >
-                                                <span className="text-base font-semibold flex">
-                                                    <span className="px-1 bg-gradient-to-r rounded-md to-sky-600 from-teal-500 mr-2">🏋️‍♂️</span>
-                                                    Power Training
-                                                </span>
-                                                <Checkbox id="power_training" className="mt-1" />
-                                            </Label>
-                                            <Label
-                                                htmlFor="stretch"
-                                                className={`flex justify-between gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 
-                                                      ${activity === "stretch" ? "border-sky-600 dark:border-sky-500" : "border-gray-300 dark:border-gray-700"}`}
-                                            >
-                                                <span className="text-base font-semibold flex">
-                                                    <span className="px-1 bg-gradient-to-r rounded-md to-sky-600 from-teal-500 mr-2">🤸‍♂️</span>
-                                                    Stretch
-                                                </span>
-                                                <Checkbox id="stretch" className="mt-1" />
-                                            </Label>
-                                            <Label
-                                                htmlFor="dancing"
-                                                className={`flex justify-between gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 
-                                                      ${activity === "dancing" ? "border-sky-600 dark:border-sky-500" : "border-gray-300 dark:border-gray-700"}`}
-                                            >
-                                                <span className="text-base font-semibold flex">
-                                                    <span className="px-1 bg-gradient-to-r rounded-md to-sky-600 from-teal-500 mr-2">💃</span>
-                                                    Dancing
-                                                </span>
-                                                <Checkbox id="dancing" className="mt-1" />
-                                            </Label>
-                                            <Label
-                                                htmlFor="yoga"
-                                                className={`flex justify-between gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 
-                                                      ${activity === "yoga" ? "border-sky-600 dark:border-sky-500" : "border-gray-300 dark:border-gray-700"}`}
-                                            >
-                                                <span className="text-base font-semibold flex">
-                                                    <span className="px-1 bg-gradient-to-r rounded-md to-sky-600 from-teal-500 mr-2">🧘‍♂️</span>
-                                                    Yoga
-                                                </span>
-                                                <Checkbox id="yoga" className="mt-1" />
-                                            </Label>
+                                            {["cardio", "power_training", "stretch", "dancing", "yoga"].map((act) => (
+                                                <Label
+                                                    key={act}
+                                                    htmlFor={act}
+                                                    className={`flex justify-between gap-2 p-2 border rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 
+                                                          ${activities.includes(act) ? "border-sky-600 dark:border-sky-500" : "border-gray-300 dark:border-gray-700"}`}
+                                                >
+                                                    <span className="text-base font-semibold flex">
+                                                        <span className="px-1 bg-gradient-to-r rounded-md to-sky-600 from-teal-500 mr-2">
+                                                            {act === "cardio" ? "🏃‍♂️‍➡️" : act === "power_training" ? "🏋️‍♂️" : act === "stretch" ? "🤸‍♂️" : act === "dancing" ? "💃" : "🧘‍♂️"}
+                                                        </span>
+                                                        {act.replace('_', ' ').charAt(0).toUpperCase() + act.replace('_', ' ').slice(1)}
+                                                    </span>
+                                                    <Checkbox
+                                                        id={act}
+                                                        checked={activities.includes(act)}
+                                                        onCheckedChange={(checked) => {
+                                                            setActivities(prev =>
+                                                                checked
+                                                                    ? [...prev, act]
+                                                                    : prev.filter(a => a !== act)
+                                                            )
+                                                        }}
+                                                        className="mt-1"
+                                                    />
+                                                </Label>
+                                            ))}
                                         </div>
                                     </>
                                 )}
@@ -407,7 +529,7 @@ export default function OnboardingForm() {
                                     <div className="bmi_calculation">
                                         <div className="text-center space-y-6">
                                             <h1 className="text-black dark:text-gray-300 text-2xl mb-4 font-bold">
-                                                We create your training plan
+                                                Your BMI Results
                                             </h1>
                                             <div className="relative w-48 h-48 mx-auto">
                                                 <div className="absolute inset-0 flex items-center justify-center">
@@ -430,21 +552,21 @@ export default function OnboardingForm() {
                                                         stroke="#7c3aed"
                                                         strokeWidth="12"
                                                         strokeDasharray={553}
-                                                        strokeDashoffset={553 * (1 - 0.75)}
+                                                        strokeDashoffset={553 * (1 - Number(calculateBMI()) / 40)}
                                                     />
                                                 </svg>
                                             </div>
+                                            <p className="text-xl font-semibold mt-4">
+                                                Your BMI category: {getBMICategory(Number(calculateBMI()))}
+                                            </p>
                                             <p className="text-gray-600 dark:text-gray-400 mt-4">
-                                                We create a workout according to demographic profile, activity level and interests
+                                                {getBMIAdvice(getBMICategory(Number(calculateBMI())))}
                                             </p>
                                             <Button
                                                 className="w-full bg-[#2266c5] hover:bg-[#226aa5] text-white font-semibold py-3 px-6 rounded-full"
-                                                onClick={() => {
-                                                    // Handle workout plan generation
-                                                    console.log("Generating workout plan...");
-                                                }}
+                                                onClick={handleSubmit}
                                             >
-                                                Start Training
+                                                Start Your Personalized Training
                                             </Button>
                                         </div>
                                     </div>
