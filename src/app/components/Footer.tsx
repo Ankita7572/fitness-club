@@ -15,7 +15,7 @@ export default function Footer() {
         <footer className="bg-zinc-900 text-white" id="contact">
             {/* Navigation */}
             <div className="container mx-auto px-4 py-6 flex flex-wrap justify-between items-center border-b border-zinc-800">
-                <nav className="flex flex-wrap gap-6">
+                <nav className="flex invisible flex-wrap gap-6">
                     <Link href="/#" className="hover:text-[#257ebe] transition-colors">
                         HOME
                     </Link>
@@ -31,7 +31,7 @@ export default function Footer() {
                     <Link href="/blog#blog" className="hover:text-[#257ebe] transition-colors">
                         BLOG
                     </Link>
-                    
+
                 </nav>
                 <div className="flex gap-4 mt-4 sm:mt-0">
                     <Link href="#" className="bg-[#257ebe] p-2 rounded-full hover:bg-[#257ebe] transition-colors">
@@ -65,7 +65,7 @@ export default function Footer() {
                         <h2 className="text-2xl font-bold mb-6 text-[#257ebe]">ADDRESS</h2>
                         <div className="space-y-4 text-zinc-400">
                             <p>
-                               Pluse - Fitness Center 2165 Aurora Rd, Bedford Heights, OH 6543 North London, USA
+                                Pluse - Fitness Center 2165 Aurora Rd, Bedford Heights, OH 6543 North London, USA
                             </p>
                             <p>330-341-0476</p>
                             <p>support@rstheme.com</p>
