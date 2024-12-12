@@ -1,6 +1,5 @@
-import { SiteHeader } from "@/components/site-header"
-import { MenuPage } from "@/components/menu-page"
 import { LayoutPage } from "@/app/dashboard/LayoutPage"
+import { MenuPage } from "@/components/menu-page"
 
 // Sample data - in a real app, this would come from an API
 const menuItems = [
@@ -45,14 +44,19 @@ const menuItems = [
     // Add more menu items as needed
 ]
 
-export default function MenuPageRoute({ params }: { params: { id: string } }) {
+interface MenuPageProps {
+    params: {
+        id: string
+    }
+}
+
+export default function MenuPageRoute({ params }: MenuPageProps) {
     // In a real app, you would fetch the restaurant details and menu items based on the id
     return (
         <LayoutPage>
             <div className="min-h-screen bg-background px-4">
-
                 <main className="container py-6">
-                    <h1 className="text-2xl font-bold mb-6">Restaurant Menu</h1>
+                    <h1 className="text-2xl font-bold mb-6">Restaurant Menu (ID: {params.id})</h1>
                     <MenuPage items={menuItems} />
                 </main>
             </div>
