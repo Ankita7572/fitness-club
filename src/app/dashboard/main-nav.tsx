@@ -1,13 +1,15 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Home, User, Stethoscope, UtensilsCrossed, LogOut } from 'lucide-react'
 import Image from 'next/image'
+import { signOut } from "firebase/auth"
+import { auth } from "@/lib/firebase/config"
 
 export function MainNav() {
     const pathname = usePathname()
-
+    const router = useRouter()
     const navItems = [
         { href: "/dashboard", icon: Home, label: "Dashboard" },
         { href: "/profile", icon: User, label: "Profile" },
@@ -21,7 +23,15 @@ export function MainNav() {
         }
         return pathname.startsWith(href)
     }
-
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            localStorage.removeItem("userInfo"); // Clear user data from localStorage on sign out
+            router.push('/login');
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
+    };
     return (
         <div className="flex flex-col h-screen">
             <div className="flex h-14 items-center border-b border-border px-4">
@@ -36,8 +46,8 @@ export function MainNav() {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-accent-foreground ${isActive(item.href)
-                                    ? "bg-sky-600 text-white"
-                                    : "text-muted-foreground hover:bg-accent"
+                                ? "bg-sky-600 text-white"
+                                : "text-muted-foreground hover:bg-accent"
                                 }`}
                         >
                             <item.icon className="h-4 w-4" />
@@ -47,7 +57,7 @@ export function MainNav() {
                 </nav>
             </div>
             <div className="mt-auto border-t border-border p-4 space-y-4">
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-accent-foreground hover:bg-accent">
+                <button onClick={handleSignOut} className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-accent-foreground hover:bg-accent">
                     <LogOut className="h-4 w-4" />
                     Sign Out
                 </button>
