@@ -44,12 +44,14 @@ const menuItems = [
     // Add more menu items as needed
 ];
 
+// Explicitly define the type for the params
 interface MenuPageProps {
-    params: Record<string, string>;
+    params: { id: string }; // Ensure params has the id field as a string
 }
 
+// Default export for the dynamic route
 export default function MenuPageRoute({ params }: MenuPageProps) {
-    // In a real app, you would fetch the restaurant details and menu items based on the id
+    // Render the menu page
     return (
         <LayoutPage>
             <div className="min-h-screen bg-background px-4">
