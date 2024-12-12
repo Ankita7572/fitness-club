@@ -1,5 +1,5 @@
-import { LayoutPage } from "@/app/dashboard/LayoutPage"
-import { MenuPage } from "@/components/menu-page"
+import { LayoutPage } from "@/app/dashboard/LayoutPage";
+import { MenuPage } from "@/components/menu-page";
 
 // Sample data - in a real app, this would come from an API
 const menuItems = [
@@ -7,47 +7,45 @@ const menuItems = [
         id: "1",
         name: "Tomato with Tofu Salad",
         description: "Fresh tomatoes and tofu with special dressing",
-        price: 97.50,
+        price: 97.5,
         image: "/img/food1.jpg",
         category: "Main Course",
         available: 12,
-        discount: 15
+        discount: 15,
     },
     {
         id: "2",
         name: "Japanese Chicken Gyoza",
         description: "Delicious Japanese dumplings filled with chicken",
-        price: 81.70,
+        price: 81.7,
         image: "/img/food2.jpg",
         category: "Appetizer",
         available: 8,
-        discount: 10
+        discount: 10,
     },
     {
         id: "3",
         name: "2pcs of Amazing Avocado",
         description: "Fresh, ripe avocados",
-        price: 68.00,
+        price: 68.0,
         image: "/img/food3.jpg",
         category: "Side Dishes",
-        available: 10
+        available: 10,
     },
     {
         id: "4",
         name: "Lettuce with Stuff",
         description: "Crisp lettuce with assorted toppings",
-        price: 170.00,
+        price: 170.0,
         image: "/img/food5.jpg",
         category: "Main Course",
-        available: 5
+        available: 5,
     },
     // Add more menu items as needed
-]
+];
 
 interface MenuPageProps {
-    params: {
-        id: string
-    }
+    params: Record<string, string>;
 }
 
 export default function MenuPageRoute({ params }: MenuPageProps) {
@@ -61,6 +59,5 @@ export default function MenuPageRoute({ params }: MenuPageProps) {
                 </main>
             </div>
         </LayoutPage>
-    )
+    );
 }
-
