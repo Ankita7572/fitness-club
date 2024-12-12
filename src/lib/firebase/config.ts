@@ -9,14 +9,13 @@ import { getFirestore } from "firebase/firestore";
 
 
 export const firebaseConfig = {
-       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-       measurementId:process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+       apiKey: "AIzaSyBgmyhu9YSy7otS5qRcO1_zUnuPmASmgec",
+  authDomain: "fitness-club-29c91.firebaseapp.com",
+  projectId: "fitness-club-29c91",
+  storageBucket: "fitness-club-29c91.firebasestorage.app",
+  messagingSenderId: "353731357947",
+  appId: "1:353731357947:web:d4e04d20d43324e80bd45e",
+  measurementId: "G-7LL9921P7N"
  };
 
 // Initialize Firebase
