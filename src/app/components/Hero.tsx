@@ -11,13 +11,13 @@ import { Button } from '@/components/ui/button'
 const slides = [
     {
         id: 1,
-        image: '/img/home3-slider2.jpg',
+        image: '/img/webpage/home3-slider2.jpg',
         subtitle: "Welcome to Fitness Club",
         title: "Discover a World of Opportunities",
     },
     {
         id: 2,
-        image: '/img/slider1.jpg',
+        image: '/img/webpage/slider1.jpg',
         title: "Experience the Future Today!",
         subtitle: "Innovation at Your Fingertips",
     }
