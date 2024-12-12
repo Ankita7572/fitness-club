@@ -57,7 +57,7 @@ export default function Testimonials() {
 
     return (
         <div
-            className="relative mt-10 pt-16 z-10 h-[600px] bg-black bg-opacity-75 flex items-center justify-center px-4"
+            className="relative mt-10 pt-16 z-10 h-[600px] bg-black bg-opacity-75 flex items-center justify-center px-4" id='testimonial'
             style={{
                 backgroundImage: "url('/img/webpage/testimonial.jpg')",
                 backgroundSize: 'cover',

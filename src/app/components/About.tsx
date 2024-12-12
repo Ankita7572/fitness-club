@@ -12,7 +12,7 @@ export default function About() {
     }, [])
 
     return (
-        <section className="container mx-auto px-4 pb-5 -mt-16 max-sm:mt-0 overflow-hidden">
+        <section className="container mx-auto px-4 pb-5 -mt-16 max-sm:mt-0 overflow-hidden" id='about'>
             <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
                 {/* Text Content */}
                 <div className="w-full lg:w-1/2 space-y-6">

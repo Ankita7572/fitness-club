@@ -31,11 +31,11 @@ export function Header() {
                         <Image src="/img/logo.png" alt='logo' width={120} height={60} className='w-32 h-24' />
                     </Link>
 
-                    <nav className="hidden md:flex items-center space-x-1">
+                    <nav className="hidden  items-center space-x-1">
                         {navItems.map((item) => (
                             <Link
                                 key={item}
-                                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                                href={item === 'Home' ? '/' : `/${item.toLowerCase()}#${item.toLowerCase()}`}
                                 className={`px-3 py-2 rounded-md text-xl font-semibold hover:bg-[#257ebe] hover:text-white  transition-colors ${scrolled
                                     ? 'text-foreground hover:bg-muted'
                                     : 'text-white hover:bg-white/20'
@@ -48,12 +48,12 @@ export function Header() {
 
                     </nav>
                     <Link href="/login">
-                    <Button variant="outline" size="lg" className="ml-4 hidden md:block text-lg font-semibold shadow-slate-400 shadow-md">
-                        Login
-                    </Button>
+                        <Button variant="outline" size="lg" className="ml-4  block text-lg font-semibold shadow-slate-400 shadow-md">
+                            Login
+                        </Button>
                     </Link>
 
-                    <div className="flex md:hidden">
+                    <div className="hidden">
 
                         <Button
                             variant="ghost"
@@ -69,12 +69,12 @@ export function Header() {
 
             {/* Mobile menu */}
             {mobileMenuOpen && (
-                <div className="md:hidden bg-white text-black ">
+                <div className="hidden bg-white text-black ">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         {navItems.map((item) => (
                             <Link
                                 key={item}
-                                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                                href={item === 'Home' ? '/' : `/${item.toLowerCase()}#${item.toLowerCase()}`}
                                 className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-muted"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
@@ -82,9 +82,9 @@ export function Header() {
                             </Link>
                         ))}
                         <Link href="/login">
-                        <Button variant="outline" className="w-full mt-2">
-                            Login
-                        </Button>
+                            <Button variant="outline" className="w-full mt-2">
+                                Login
+                            </Button>
                         </Link>
                     </div>
                 </div>

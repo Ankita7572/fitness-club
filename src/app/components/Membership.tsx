@@ -35,7 +35,7 @@ export default function Membership() {
     ]
 
     return (
-        <div className="relative py-16 md:py-24" style={{
+        <div className="relative py-16 md:py-24" id="membership" style={{
             backgroundImage: "url('/img/webpage/classes.jpg')",
             backgroundSize: 'cover',
             backgroundPosition: 'center'

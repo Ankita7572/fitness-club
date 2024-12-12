@@ -77,7 +77,7 @@ export default function Blog() {
     }
 
     return (
-        <section className="py-16 px-4">
+        <section className="py-16 px-4" id="blog">
             <div className="container mx-auto">
                 <div className="text-center mb-12">
                     <h3 className="text-[#257ebe] font-medium mb-2">Our Updates</h3>

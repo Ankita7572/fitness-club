@@ -12,7 +12,7 @@ export default function Footer() {
     }
 
     return (
-        <footer className="bg-zinc-900 text-white">
+        <footer className="bg-zinc-900 text-white" id="contact">
             {/* Navigation */}
             <div className="container mx-auto px-4 py-6 flex flex-wrap justify-between items-center border-b border-zinc-800">
                 <nav className="flex flex-wrap gap-6">
@@ -22,7 +22,7 @@ export default function Footer() {
                     <Link href="/about#about" className="hover:text-[#257ebe] transition-colors">
                         ABOUT
                     </Link>
-                    <Link href="/testimonial#textimonial" className="hover:text-[#257ebe] transition-colors">
+                    <Link href="/testimonial#testimonial" className="hover:text-[#257ebe] transition-colors">
                         Testimonial
                     </Link>
                     <Link href="/mentorship#mentorship" className="hover:text-[#257ebe] transition-colors">

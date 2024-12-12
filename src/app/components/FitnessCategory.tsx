@@ -25,7 +25,7 @@ const categories = [
         id: 3,
         title: 'YOGA FITNESS',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
-        image: '/img/yoga.jpg',
+        image: '/img/webpage/yoga.jpg',
         icon: Yoga,
         color: 'from-slate-700/40',
     },
