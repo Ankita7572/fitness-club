@@ -15,7 +15,7 @@ export default function Page(props: {
     const experts = [
         {
             name: "Dr. Sarah Johnson",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "DPT, Sports Physiotherapy Specialist",
             description: "15+ years experience in sports rehabilitation and manual therapy. Specialized in treating professional athletes and complex injuries.",
             location: "London",
@@ -25,7 +25,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Michael Chen",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "MPT, Orthopedic Certified Specialist",
             description: "Expert in post-surgical rehabilitation and spine care. Former team physiotherapist for national sports teams.",
             location: "New York",
@@ -35,7 +35,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Emma Thompson",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "PhD in Rehabilitation Sciences",
             description: "Specializes in neurological rehabilitation and chronic pain management. Published researcher in physiotherapy techniques.",
             location: "Melbourne",
@@ -45,7 +45,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Sarah Johnson",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "DPT, Sports Physiotherapy Specialist",
             description: "15+ years experience in sports rehabilitation and manual therapy. Specialized in treating professional athletes and complex injuries.",
             location: "London",
@@ -55,7 +55,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Michael Chen",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "MPT, Orthopedic Certified Specialist",
             description: "Expert in post-surgical rehabilitation and spine care. Former team physiotherapist for national sports teams.",
             location: "New York",
@@ -65,7 +65,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Emma Thompson",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "PhD in Rehabilitation Sciences",
             description: "Specializes in neurological rehabilitation and chronic pain management. Published researcher in physiotherapy techniques.",
             location: "Melbourne",
@@ -75,7 +75,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Sarah Johnson",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "DPT, Sports Physiotherapy Specialist",
             description: "15+ years experience in sports rehabilitation and manual therapy. Specialized in treating professional athletes and complex injuries.",
             location: "London",
@@ -85,7 +85,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Michael Chen",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "MPT, Orthopedic Certified Specialist",
             description: "Expert in post-surgical rehabilitation and spine care. Former team physiotherapist for national sports teams.",
             location: "New York",
@@ -95,7 +95,7 @@ export default function Page(props: {
         },
         {
             name: "Dr. Emma Thompson",
-            image: "/img/gl_1.jpg",
+            image: "/img/webpage/gl_1.jpg",
             certification: "PhD in Rehabilitation Sciences",
             description: "Specializes in neurological rehabilitation and chronic pain management. Published researcher in physiotherapy techniques.",
             location: "Melbourne",

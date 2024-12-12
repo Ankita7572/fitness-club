@@ -13,7 +13,7 @@ const blogPosts = [
         date: "March 25, 2019",
         author: "admin",
         excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
-        image: "/img/post_1.jpg",
+        image: "/img/webpage/post_1.jpg",
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ const blogPosts = [
         date: "February 22, 2019",
         author: "admin",
         excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
-        image: "/img/post_2.jpg",
+        image: "/img/webpage/post_2.jpg",
     },
     {
         id: 3,
@@ -29,7 +29,7 @@ const blogPosts = [
         date: "February 22, 2019",
         author: "admin",
         excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
-        image: "/img/post_4.jpg",
+        image: "/img/webpage/post_4.jpg",
     },
     {
         id: 4,
@@ -37,7 +37,7 @@ const blogPosts = [
         date: "February 21, 2019",
         author: "admin",
         excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
-        image: "/img/post_5.jpg",
+        image: "/img/webpage/post_5.jpg",
     },
 ]
 

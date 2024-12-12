@@ -76,7 +76,7 @@ export default function About() {
                     <div className="relative h-[600px] w-full rounded-lg overflow-hidden ">
 
                         <Image
-                            src="/img/about-2.png"
+                            src="/img/webpage/about-2.png"
                             alt="Fitness Trainer"
                             fill
                             className="object-contain"

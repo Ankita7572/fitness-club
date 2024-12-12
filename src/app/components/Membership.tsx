@@ -8,7 +8,7 @@ export default function Membership() {
         {
             title: "VINYASA FLOW",
             category: "Yoga & Meditation",
-            image: "/img/class_4.jpg",
+            image: "/img/webpage/class_4.jpg",
             description:
                 "We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms...",
             students: "25 Per Shift",
@@ -17,7 +17,7 @@ export default function Membership() {
         {
             title: "ASTANGA YOGA",
             category: "Yoga & Meditation",
-            image: "/img/class_4.jpg",
+            image: "/img/webpage/class_4.jpg",
             description:
                 "We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms...",
             students: "25 Per Shift",
@@ -26,7 +26,7 @@ export default function Membership() {
         {
             title: "FITNESS FREE CLASS",
             category: "Boxing & Sports",
-            image: "/img/class_6.jpg",
+            image: "/img/webpage/class_6.jpg",
             description:
                 "We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms...",
             students: "115 Per Shift",
@@ -36,7 +36,7 @@ export default function Membership() {
 
     return (
         <div className="relative py-16 md:py-24" style={{
-            backgroundImage: "url('/img/classes.jpg')",
+            backgroundImage: "url('/img/webpage/classes.jpg')",
             backgroundSize: 'cover',
             backgroundPosition: 'center'
         }}>

@@ -11,42 +11,42 @@ import { Card } from '@/components/ui/card'
 const cardsData = [
     {
         id: 1,
-        imageUrl: '/img/gl_1.jpg',
+        imageUrl: '/img/webpage/gl_1.jpg',
         alt: 'Weightlifting exercise'
     },
     {
         id: 2,
-        imageUrl: '/img/gl_2.jpg',
+        imageUrl: '/img/webpage/gl_2.jpg',
         alt: 'Gym training'
     },
     {
         id: 3,
-        imageUrl: '/img/gl_3.jpg',
+        imageUrl: '/img/webpage/gl_3.jpg',
         alt: 'Fitness workout'
     },
     {
         id: 4,
-        imageUrl: '/img/gl_4.jpg',
+        imageUrl: '/img/webpage/gl_4.jpg',
         alt: 'Exercise routine'
     },
     {
         id: 5,
-        imageUrl: '/img/gl_5.jpg',
+        imageUrl: '/img/webpage/gl_5.jpg',
         alt: 'Weightlifting exercise'
     },
     {
         id: 6,
-        imageUrl: '/img/gl_6.jpg',
+        imageUrl: '/img/webpage/gl_6.jpg',
         alt: 'Gym training'
     },
     {
         id: 7,
-        imageUrl: '/img/gl_7.jpg',
+        imageUrl: '/img/webpage/gl_7.jpg',
         alt: 'Fitness workout'
     },
     {
         id: 8,
-        imageUrl: '/img/gl_8.jpg',
+        imageUrl: '/img/webpage/gl_8.jpg',
         alt: 'Exercise routine'
     }
 ]

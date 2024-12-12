@@ -16,25 +16,25 @@ export default function Testimonials() {
             quote: "Nulla in pharetra sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc varius lorem quis enim semper euismod.",
             author: "Jesmin Narayon",
             position: "Ceo & Founder",
-            image: "/img/cl_1.jpg"
+            image: "/img/webpage/cl_1.jpg"
         },
         {
             quote: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel.",
             author: "Sarah Johnson",
             position: "Fitness Trainer",
-            image: "/img/cl_2.jpg"
+            image: "/img/webpage/cl_2.jpg"
         },
         {
             quote: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
             author: "Mike Anderson",
             position: "Professional Athlete",
-            image: "/img/cl_3.jpg"
+            image: "/img/webpage/cl_3.jpg"
         },
         {
             quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
             author: "Emma Wilson",
             position: "Yoga Instructor",
-            image: "/img/cl_4.jpg"
+            image: "/img/webpage/cl_4.jpg"
         }
     ]
 
@@ -59,7 +59,7 @@ export default function Testimonials() {
         <div
             className="relative mt-10 pt-16 z-10 h-[600px] bg-black bg-opacity-75 flex items-center justify-center px-4"
             style={{
-                backgroundImage: "url('/img/testimonial.jpg')",
+                backgroundImage: "url('/img/webpage/testimonial.jpg')",
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
