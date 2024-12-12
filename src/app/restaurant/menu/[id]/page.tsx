@@ -46,17 +46,20 @@ const menuItems = [
 
 // Explicitly define the type for the params
 interface MenuPageProps {
-    params: { id: string }; // Ensure params has the id field as a string
+    params: Promise<{ id: string }>;
 }
 
 // Default export for the dynamic route
-export default function MenuPageRoute({ params }: MenuPageProps) {
+export default async function MenuPageRoute({ params }: MenuPageProps) {
+    // Await the params promise to get the id
+    const { id } = await params;
+
     // Render the menu page
     return (
         <LayoutPage>
             <div className="min-h-screen bg-background px-4">
                 <main className="container py-6">
-                    <h1 className="text-2xl font-bold mb-6">Restaurant Menu (ID: {params.id})</h1>
+                    <h1 className="text-2xl font-bold mb-6">Restaurant Menu (ID: {id})</h1>
                     <MenuPage items={menuItems} />
                 </main>
             </div>
