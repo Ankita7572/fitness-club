@@ -9,7 +9,7 @@ import Image from "next/image"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import {  saveUserData } from "@/lib/firebase/firebaseDb"
+import { saveUserData } from "@/lib/firebase/firebaseDb"
 import { auth } from "@/lib/firebase/config"
 import { useRouter } from "next/navigation"
 
@@ -93,7 +93,7 @@ export default function OnboardingForm() {
         return "obese";
     };
 
-   const getBMIAdvice = (category: string): string => {
+    const getBMIAdvice = (category: string): string => {
         switch (category) {
             case "underweight":
                 return "Consider increasing your calorie intake with nutrient-dense foods and incorporate strength training exercises to build muscle mass.";
@@ -211,8 +211,8 @@ export default function OnboardingForm() {
 
             await saveUserData(UserData);
             console.log("Workout plan generated successfully!");
-            
 
+            router.push("/dashboard")
         } catch (error) {
             console.error("Submission error:", error);
             setErrorMessage("An error occurred. Please try again.");
