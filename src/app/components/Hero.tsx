@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 const slides = [
     {
@@ -103,16 +104,19 @@ export default function Hero() {
                                 className={`flex max-sm:grid gap-4 transition-all duration-1000 ease-out ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                                     }`}
                                 style={{ transitionDelay: '0.6s' }}
-                            >
+                            ><Link href="/login">
                                 <Button
                                     variant="outline"
                                     className="border-2 rounded-3xl border-[#257ebe] bg-transparent px-8 py-6 text-lg font-semibold text-white hover:bg-[#257ebe] hover:text-white transition-all duration-300"
                                 >
                                     JOIN WITH US
                                 </Button>
+                                </Link>
+                                <Link href="/login">
                                 <Button className="border-2 rounded-3xl border-[#257ebe] bg-[#257ebe] px-8 py-6 text-lg font-semibold text-white hover:bg-[#257ebe]/90 transition-all duration-300">
                                     READ MORE
                                 </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>
