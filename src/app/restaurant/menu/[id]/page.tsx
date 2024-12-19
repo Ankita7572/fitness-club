@@ -1,4 +1,5 @@
-import { LayoutPage } from "@/app/dashboard/LayoutPage";
+
+import LayoutPage from "@/app/dashboard/LayoutPage";
 import { MenuPage } from "@/components/menu-page";
 
 // Sample data - in a real app, this would come from an API

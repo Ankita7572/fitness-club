@@ -1,6 +1,7 @@
 import { SiteHeader } from "@/components/site-header"
 import { RestaurantCard } from "@/components/restaurant-card"
-import { LayoutPage } from "../dashboard/LayoutPage"
+import LayoutPage from "../dashboard/LayoutPage"
+
 
 // Sample data - in a real app, this would come from an API
 const restaurants = [
