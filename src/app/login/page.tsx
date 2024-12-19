@@ -15,13 +15,15 @@ import {
     signInWithPopup,
     User,
     signInWithEmailAndPassword,
-    fetchSignInMethodsForEmail
+    fetchSignInMethodsForEmail,
+    setPersistence,
+    browserLocalPersistence
 } from "firebase/auth"
 import app, { db } from "@/lib/firebase/config"
 import { useRouter } from "next/navigation"
 import OnboardingForm from "../onboarding/page"
 import DashboardPage from "../dashboard/page"
-import { collection, doc, getDoc, getFirestore } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore"
 import { toast } from "sonner"
 
 const images = ['/img/log1.png', '/img/log2.png', '/img/log3.png']
@@ -99,44 +101,50 @@ export default function LoginPage() {
         const auth = getAuth(app);
 
         try {
+            // Check if the email exists in the users collection
+            const userRef = collection(db, 'users');
+            const q = query(userRef, where("email", "==", email));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                setError("No user found with this email");
+                return;
+            }
+
+            // If email exists, proceed with login
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            const idToken = await user.getIdToken();
 
-            const response = await fetch("/api/auth/sign-in", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ idToken, email }),
-            });
+            // Create a session by setting the persistence to LOCAL
+            await setPersistence(auth, browserLocalPersistence);
 
-            const resBody = await response.json();
-            if (response.ok && resBody.success) {
+            // Store user information in localStorage
+            const userInfo = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName || '',
+                photoURL: user.photoURL || ''
+            };
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+            // Check if the user has completed onboarding
+            const userDocRef = doc(db, 'user_data', user.email!);
+            const userDoc = await getDoc(userDocRef);
+
+            if (userDoc.exists() && userDoc.data().onboardingCompleted) {
+                toast.success("User logged in successfully");
+                router.replace("/dashboard");
+            } else {
                 toast.success("User logged in successfully");
                 router.replace("/onboarding");
-                const userDataRef = doc(db, 'user_data', user.email || '')
-                const userDataSnap = await getDoc(userDataRef)
-
-                if (userDataSnap.exists()) {
-                    // User exists in user_data collection, route to dashboard
-                    router.push("/dashboard")
-                } else {
-                    // User doesn't exist in user_data collection, route to onboarding
-                    router.push("/onboarding")
-                }
-            } else {
-                throw new Error(resBody.data || "Failed to create session");
             }
         } catch (error: any) {
             console.error("Error signing in:", error);
             let errorMessage = "An error occurred during sign in";
-            if (error.code === "auth/user-not-found") {
-                errorMessage = "No user found with this email";
-            } else if (error.code === "auth/wrong-password") {
+            if (error.code === "auth/wrong-password") {
                 errorMessage = "Incorrect password";
-            } else if (error.message === "User not found in our records.") {
-                errorMessage = "User not found in our records";
+            } else if (error.code === "auth/user-not-found") {
+                errorMessage = "No user found with this email";
             }
             toast.error(errorMessage);
         }
@@ -167,7 +175,7 @@ export default function LoginPage() {
                 email: user.email || '',
                 photoURL: user.photoURL || ''
             }
-            localStorage.setItem('user_data', JSON.stringify(userInfo))
+            localStorage.setItem('userInfo', JSON.stringify(userInfo))
 
             router.push("/onboarding")
         } catch (error: any) {

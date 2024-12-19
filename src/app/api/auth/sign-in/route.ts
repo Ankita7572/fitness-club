@@ -1,48 +1,40 @@
-import { db } from '@/lib/firebase/config';
-import { createSessionCookie } from '@/lib/firebase/firebase-admin';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { NextResponse } from 'next/server';
+import { db, auth } from '@/lib/firebase/config';
 
-import { NextRequest, NextResponse } from 'next/server';
+export async function POST(request: Request) {
+  try {
+    const { email, password } = await request.json();
 
+    // Access Firestore and check if the email exists in the users collection
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, where('email', '==', email));
+    const userSnapshot = await getDocs(q);
 
-// Define the type for API responses
-type APIResponse<T> = {
-  success: boolean;
-  data: T;
-};
-
-// Define the cookies function (replace with your actual implementation)
-async function cookies() {
-  //Implementation for getting cookies
-  return {
-    set: (name: string, value: string, options: any) => {
-      //Implementation for setting cookies
-      console.log(`Setting cookie ${name} with value ${value} and options:`, options);
+    if (userSnapshot.empty) {
+      return NextResponse.json({ success: false, error: 'User not found in the system.' }, { status: 404 });
     }
+
+    // If the user exists, attempt to sign in
+    const authInstance = getAuth();
+    const userCredential = await signInWithEmailAndPassword(authInstance, email, password);
+    const user = userCredential.user;
+
+    if (!user) {
+      return NextResponse.json({ success: false, error: 'Invalid credentials.' }, { status: 401 });
+    }
+
+    // You might want to create a session or JWT token here
+    // For simplicity, we're just returning the user's ID
+    return NextResponse.json({ success: true, userId: user.uid });
+
+  } catch (error: any) {
+    console.error('Login error:', error);
+    return NextResponse.json({ 
+      success: false, 
+      error: error.message || 'An error occurred during login.' 
+    }, { status: 500 });
   }
-}
-
-
-export async function POST(request: NextRequest) {
-  const reqBody = (await request.json()) as { idToken: string; email: string };
-  const { idToken, email } = reqBody;
-
-  const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
-
-  // Check if the user exists in the 'users' collection
-  const usersRef = collection(db, 'users');
-  const q = query(usersRef, where("email", "==", email));
-  const querySnapshot = await getDocs(q);
-
-  if (querySnapshot.empty) {
-    return NextResponse.json<APIResponse<string>>({ success: false, data: "User not found in our records." }, { status: 404 });
-  }
-
-  const sessionCookie = await createSessionCookie(idToken, { expiresIn });
-
-  // Set the session cookie
-  (await cookies()).set("__session", sessionCookie, { maxAge: expiresIn, httpOnly: true, secure: true });
-
-  return NextResponse.json<APIResponse<string>>({ success: true, data: "Signed in successfully." });
 }
 

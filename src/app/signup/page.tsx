@@ -92,10 +92,12 @@ export default function SignupPage() {
             // Store user information in Firestore
             const userRef = doc(db, 'users', user.uid);
             await setDoc(userRef, {
+                uid:user.uid,
                 displayName,
                 email,
                 photoURL: user.photoURL || '',
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
+                
             });
 
             // Store user information in localStorage
