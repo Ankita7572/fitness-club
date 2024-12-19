@@ -56,7 +56,7 @@ export default function ForgotPasswordPage() {
             // Optional: Redirect to login or clear email field
             setTimeout(() => {
                 router.push('/login')
-            }, 2000)
+            }, 4000)
         } catch (error: any) {
             // Detailed error handling
             console.error("Password reset error:", error)

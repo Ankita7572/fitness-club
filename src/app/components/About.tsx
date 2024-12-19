@@ -24,7 +24,7 @@ export default function About() {
                         }}
                     >
                         <h3 className="text-[#257ebe] text-xl font-semibold">
-                            About The Gimnas Gym
+                            About The Pulse Gym
                         </h3>
                         <h2 className="text-4xl lg:text-5xl font-bold leading-tight relative pb-6">
                             WE ALWAYS PROVIDE BEST FITNESS SERVICE FOR 25 YEARS
@@ -32,7 +32,7 @@ export default function About() {
                         </h2>
                         <div className="space-y-4">
                             <p className="text-gray-600 dark:text-gray-300">
-                                <span className="font-semibold mr-1 dark:text-gray-200 text-black">Gimnas – Fitness Center</span> is a professional fitness training center. We provide all kinds of fitness training and we have all modern instruments.
+                                <span className="font-semibold mr-1 dark:text-gray-200 text-black">Pulse – Fitness Center</span> is a professional fitness training center. We provide all kinds of fitness training and we have all modern instruments.
                             </p>
                             <p className="text-gray-600 dark:text-gray-300">
                                 On the other hand, we denounce with righteous indignation the fault anuals dislike men who are so beguiled and demoralized by the nuhgilcharms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound toen sue.

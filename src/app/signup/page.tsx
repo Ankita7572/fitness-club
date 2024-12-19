@@ -16,9 +16,10 @@ import {
     createUserWithEmailAndPassword,
     fetchSignInMethodsForEmail
 } from "firebase/auth"
-import app from "@/lib/firebase/config"
+import app, { db } from "@/lib/firebase/config"
 import { useRouter } from "next/navigation"
 import OnboardingForm from "../onboarding/page"
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore"
 
 const images = ['/img/log1.png', '/img/log2.png', '/img/log3.png']
 
@@ -26,7 +27,7 @@ export default function SignupPage() {
     const [currentImage, setCurrentImage] = useState(0)
     const [showPassword, setShowPassword] = useState(false)
     const [user, setUser] = useState<User | null>(null)
-    const [fullName, setFullName] = useState('')
+    const [displayName, setdisplayName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -66,79 +67,71 @@ export default function SignupPage() {
         return () => unsubscribe()
     }, [])
 
-    const handleSignup = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setError(null)
+    const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError(null);
 
-        // Basic validation
         if (password !== confirmPassword) {
-            setError("Passwords do not match")
-            return
+            setError("Passwords do not match");
+            return;
         }
-
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters long")
-            return
-        }
-
-        const auth = getAuth(app)
 
         try {
-            // First, check if email is already registered
-            const signInMethods = await fetchSignInMethodsForEmail(auth, email)
+            const auth = getAuth(app);
 
-            if (signInMethods.length > 0) {
-                // Email already exists
-                setError("Email already exists. Please use a different email or try logging in.")
-                return
+            // Check if email already exists
+            const methods = await fetchSignInMethodsForEmail(auth, email);
+            if (methods.length > 0) {
+                setError("Email already exists");
+                return;
             }
 
-            // If email doesn't exist, create the account
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-            // Optional: You might want to update the user profile with the full name
-            // await updateProfile(userCredential.user, { displayName: fullName })
+            // Store user information in Firestore
+            const userRef = doc(db, 'users', user.uid);
+            await setDoc(userRef, {
+                displayName,
+                email,
+                photoURL: user.photoURL || '',
+                createdAt: serverTimestamp()
+            });
 
             // Store user information in localStorage
             const userInfo = {
-                uid: userCredential.user.uid,
-                displayName: fullName,
-                email: email,
-                photoURL: ''
-            }
-            localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                uid: user.uid,
+                displayName: displayName,
+                email: user.email,
+            };
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
             // Redirect to onboarding
-            router.push("/onboarding")
-
+            router.push("/login");
         } catch (error: any) {
-            console.error("Signup error:", error)
-
-            // Handle specific Firebase authentication errors
-            switch (error.code) {
-                case 'auth/email-already-in-use':
-                    setError("Email already exists. Please use a different email or try logging in.")
-                    break
-                case 'auth/invalid-email':
-                    setError("Invalid email address.")
-                    break
-                case 'auth/operation-not-allowed':
-                    setError("Email/password accounts are not enabled.")
-                    break
-                default:
-                    setError("An error occurred during signup. Please try again.")
-            }
+            console.error("Error signing up:", error);
+            setError(error.message);
         }
-    }
+    };
+
 
     const signInWithGoogle = async () => {
         const auth = getAuth(app)
         const provider = new GoogleAuthProvider()
-
         try {
             const result = await signInWithPopup(auth, provider)
             const user = result.user
 
+            const userDataRef = doc(db, 'user_data', user.email || '')
+            const userDataSnap = await getDoc(userDataRef)
+
+            if (userDataSnap.exists()) {
+                // User exists in user_data collection, route to dashboard
+                router.push("/dashboard")
+            } else {
+                // User doesn't exist in user_data collection, route to onboarding
+                router.push("/onboarding")
+            }
             // Store user information in localStorage
             const userInfo = {
                 uid: user.uid,
@@ -146,7 +139,7 @@ export default function SignupPage() {
                 email: user.email || '',
                 photoURL: user.photoURL || ''
             }
-            localStorage.setItem('userInfo', JSON.stringify(userInfo))
+            localStorage.setItem('user_info', JSON.stringify(userInfo))
 
             router.push("/onboarding")
         } catch (error: any) {
@@ -214,8 +207,8 @@ export default function SignupPage() {
                                             id="name"
                                             placeholder="John Doe"
                                             type="text"
-                                            value={fullName}
-                                            onChange={(e) => setFullName(e.target.value)}
+                                            value={displayName}
+                                            onChange={(e) => setdisplayName(e.target.value)}
                                             className="bg-gray-100/50 dark:bg-gray-800"
                                             required
                                         />

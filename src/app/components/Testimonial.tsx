@@ -13,25 +13,25 @@ export default function Testimonials() {
 
     const testimonials = [
         {
-            quote: "Nulla in pharetra sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc varius lorem quis enim semper euismod.",
+            quote: "The personalized fitness tracking and training programs at this gym have truly transformed my approach to wellness. The environment is motivating, and the team ensures you stay on track to achieve your goals.",
             author: "Jesmin Narayon",
             position: "Ceo & Founder",
             image: "/img/webpage/cl_1.jpg"
         },
         {
-            quote: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel.",
+            quote: "This gym provides an incredible combination of advanced fitness tracking tools and professional guidance. It’s perfect for anyone looking to push their limits and monitor their progress effectively.",
             author: "Sarah Johnson",
             position: "Fitness Trainer",
             image: "/img/webpage/cl_2.jpg"
         },
         {
-            quote: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+            quote: "As an athlete, precision and tracking are key to my performance. This gym delivers top-notch fitness tracking systems and challenging routines to keep me at the top of my game.",
             author: "Mike Anderson",
             position: "Professional Athlete",
             image: "/img/webpage/cl_3.jpg"
         },
         {
-            quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
+            quote: "Fitness tracking at this gym goes beyond numbers; it helps you connect with your body. Whether it's yoga or strength training, their approach is holistic and supportive.",
             author: "Emma Wilson",
             position: "Yoga Instructor",
             image: "/img/webpage/cl_4.jpg"
@@ -42,7 +42,7 @@ export default function Testimonials() {
         if (!isHovered) {
             intervalRef.current = setInterval(() => {
                 setActiveTestimonial((prev) => (prev + 1) % testimonials.length)
-            }, 5000) // Change testimonial every 5 seconds
+            }, 7000) // Change testimonial every 5 seconds
         }
 
         return () => {

@@ -7,3 +7,4 @@ export interface OnboardingData {
   trainingLevel: 'beginner' | 'irregular' | 'medium' | 'advanced'
   activities: "Hiking"|"Zumba"|"Cycling"|"Yoga"|"Swimming"
 }
+export type APIResponse<T = object> = { success: true; data: T } | { success: false; error: string };

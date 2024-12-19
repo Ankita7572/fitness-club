@@ -280,7 +280,7 @@ export default function OnboardingForm() {
                                     <ArrowLeft className="h-4 w-4" />
                                 </Button>
                                 <span className="text-sm font-semibold mt-2 text-gray-700 dark:text-white">
-                                    Step {currentStep + 1} of {steps.length - 1}
+                                      {currentStep === 7 ? '' : `Step ${currentStep + 1} of ${steps.length - 1}`}
                                 </span>
                                 <span className="mt-1 text-gray-500 invisible bg-transparent border-none dark:text-gray-400">Skip</span>
                             </div>

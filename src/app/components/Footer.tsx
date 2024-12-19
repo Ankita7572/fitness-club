@@ -65,7 +65,7 @@ export default function Footer() {
                         <h2 className="text-2xl font-bold mb-6 text-[#257ebe]">ADDRESS</h2>
                         <div className="space-y-4 text-zinc-400">
                             <p>
-                                Pluse - Fitness Center 2165 Aurora Rd, Bedford Heights, OH 6543 North London, USA
+                                Pluse - Fitness Center 2165 Aurora Rd, Bedford Heights, OH 6543 North London, UK
                             </p>
                             <p>330-341-0476</p>
                             <p>support@rstheme.com</p>
@@ -95,7 +95,7 @@ export default function Footer() {
             {/* Copyright */}
             <div className="container mx-auto px-4 py-6 border-t border-zinc-800">
                 <div className="flex justify-between items-center">
-                    <p className="text-zinc-400">© 2022 Pluse. Designed by RSTheme. All Rights Reserved.</p>
+                    <p className="text-zinc-400">© 2022 Pluse. Designed by Pulse. All Rights Reserved.</p>
                     <Button
                         variant="ghost"
                         size="icon"

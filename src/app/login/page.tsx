@@ -17,11 +17,12 @@ import {
     signInWithEmailAndPassword,
     fetchSignInMethodsForEmail
 } from "firebase/auth"
-import app from "@/lib/firebase/config"
+import app, { db } from "@/lib/firebase/config"
 import { useRouter } from "next/navigation"
 import OnboardingForm from "../onboarding/page"
 import DashboardPage from "../dashboard/page"
-import { doc, getDoc, getFirestore } from "firebase/firestore"
+import { collection, doc, getDoc, getFirestore } from "firebase/firestore"
+import { toast } from "sonner"
 
 const images = ['/img/log1.png', '/img/log2.png', '/img/log3.png']
 
@@ -56,25 +57,18 @@ export default function LoginPage() {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 // Store user information in localStorage
-                const userInfo = {
-                    uid: user.uid,
-                    displayName: user.displayName || '',
-                    email: user.email || '',
-                    photoURL: user.photoURL || ''
-                }
-                localStorage.setItem('userInfo', JSON.stringify(userInfo))
-                setUser(user)
+                
 
                 try {
                     // Check if user exists in Firestore
-                    const userDoc = await getDoc(doc(db, 'users', user.uid))
-
+                    const userDocRef = doc(collection(db, 'user_data'), user.email!)
+                    const userDoc = await getDoc(userDocRef)
                     if (userDoc.exists()) {
                         // User exists, redirect to dashboard
                         router.push('/dashboard')
                     } else {
                         // New user, redirect to onboarding
-                        router.push('/onboarding')
+                        router.push('/login')
                     }
                 } catch (error) {
                     console.error('Error checking user existence:', error)
@@ -93,52 +87,61 @@ export default function LoginPage() {
         return () => unsubscribe()
     }, [])
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setError(null)
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setError(null);
 
-        // Basic validation
         if (!email || !password) {
-            setError("Please enter both email and password")
-            return
+            setError("Please enter both email and password");
+            return;
         }
 
-        const auth = getAuth(app)
+        const auth = getAuth(app);
 
         try {
-            // First, check if the email exists in Firebase Authentication
-            const signInMethods = await fetchSignInMethodsForEmail(auth, email)
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            const idToken = await user.getIdToken();
 
-            if (signInMethods.length === 0) {
-                // No sign-in methods found for this email
-                setError("No account found with this email. Please sign up.")
-                return
+            const response = await fetch("/api/auth/sign-in", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ idToken, email }),
+            });
+
+            const resBody = await response.json();
+            if (response.ok && resBody.success) {
+                toast.success("User logged in successfully");
+                router.replace("/onboarding");
+                const userDataRef = doc(db, 'user_data', user.email || '')
+                const userDataSnap = await getDoc(userDataRef)
+
+                if (userDataSnap.exists()) {
+                    // User exists in user_data collection, route to dashboard
+                    router.push("/dashboard")
+                } else {
+                    // User doesn't exist in user_data collection, route to onboarding
+                    router.push("/onboarding")
+                }
+            } else {
+                throw new Error(resBody.data || "Failed to create session");
             }
-
-
-
-            // Redirect to onboarding or dashboard
-            router.push("/dashboard")
-
         } catch (error: any) {
-            console.error("Login error:", error)
-
-            // Handle specific Firebase authentication errors
-            switch (error.code) {
-                case 'auth/invalid-credential':
-                    setError("Invalid email or password. Please try again.")
-                    break
-                case 'auth/user-disabled':
-                    setError("This account has been disabled. Please contact support.")
-                    break
-                case 'auth/too-many-requests':
-                    setError("Too many login attempts. Please try again later.")
-                    break
-                default:
-                    setError("An error occurred during login. Please try again.")
+            console.error("Error signing in:", error);
+            let errorMessage = "An error occurred during sign in";
+            if (error.code === "auth/user-not-found") {
+                errorMessage = "No user found with this email";
+            } else if (error.code === "auth/wrong-password") {
+                errorMessage = "Incorrect password";
+            } else if (error.message === "User not found in our records.") {
+                errorMessage = "User not found in our records";
             }
+            toast.error(errorMessage);
         }
     }
+
 
     const signInWithGoogle = async () => {
         const auth = getAuth(app)
@@ -147,6 +150,16 @@ export default function LoginPage() {
             const result = await signInWithPopup(auth, provider)
             const user = result.user
 
+            const userDataRef = doc(db, 'user_data', user.email || '')
+            const userDataSnap = await getDoc(userDataRef)
+
+            if (userDataSnap.exists()) {
+                // User exists in user_data collection, route to dashboard
+                router.push("/dashboard")
+            } else {
+                // User doesn't exist in user_data collection, route to onboarding
+                router.push("/onboarding")
+            }
             // Store user information in localStorage
             const userInfo = {
                 uid: user.uid,
@@ -154,7 +167,7 @@ export default function LoginPage() {
                 email: user.email || '',
                 photoURL: user.photoURL || ''
             }
-            localStorage.setItem('userInfo', JSON.stringify(userInfo))
+            localStorage.setItem('user_data', JSON.stringify(userInfo))
 
             router.push("/onboarding")
         } catch (error: any) {

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase/config";
-import { getUserDataByUid, UpdateUserData, UserData } from "@/lib/firebase/firebaseDb";
+import {  getUserDataByEmail, UpdateUserData, UserData } from "@/lib/firebase/firebaseDb";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
@@ -74,8 +74,8 @@ export default function ProfilePage() {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-            if (currentUser) {
-                const userData = await getUserDataByUid(currentUser.uid);
+            if (currentUser && currentUser.email) {  // Add check for email
+                const userData = await getUserDataByEmail(currentUser.email);
                 if (userData) {
                     setValue("displayName", userData.displayName || "");
                     setValue("email", userData.email || "");
@@ -105,7 +105,7 @@ export default function ProfilePage() {
         if (user) {
             try {
                 const updateData: UserData = {
-                    userId: user.uid,
+                    
                     displayName: data.displayName,
                     email: data.email,
                     gender: data.gender,
@@ -166,7 +166,7 @@ export default function ProfilePage() {
                         userImage: downloadURL,
                         timestamp: new Date(),
                         heightUnit: "",
-                        userId: ""
+                        
                     };
 
                     await UpdateUserData(updateData);

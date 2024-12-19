@@ -8,7 +8,7 @@ const categories = [
     {
         id: 1,
         title: 'WEIGHT TRAINING',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiususmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+        description: "Strengthen your muscles and enhance endurance with focused weight training sessions designed for all fitness levels.",
         image: '/img/webpage/lose-weight.jpg',
         icon: Accessibility,
         color: 'from-slate-800/30',
@@ -16,7 +16,7 @@ const categories = [
     {
         id: 2,
         title: 'BODY BUILDING',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+        description: "Transform your physique and build muscle definition with structured bodybuilding exercises and plans.",
         image: '/img/webpage/body-building.jpg',
         icon: User,
         color: 'from-sky-600/80',
@@ -24,7 +24,7 @@ const categories = [
     {
         id: 3,
         title: 'YOGA FITNESS',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+        description: "Achieve flexibility, balance, and inner peace through comprehensive yoga fitness practices.",
         image: '/img/webpage/yoga.jpg',
         icon: Yoga,
         color: 'from-slate-700/40',
@@ -71,7 +71,7 @@ export default function FitnessCategories() {
                                     <>
                                         <category.icon className="mb-4 h-16 w-16 p-3 rounded-full bg-sky-600 text-white" strokeWidth={1.5} />
                                         <h3 className="mb-3 text-xl font-bold text-white">{category.title}</h3>
-                                        <p className="text-white/90 text-sm">{category.description}</p>
+                                        <p className="text-white/90 text-base">{category.description}</p>
                                     </>
                                 )}
                             </div>
