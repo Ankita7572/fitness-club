@@ -3,7 +3,7 @@ import React, { use } from 'react'
 import { Card } from '@/components/ui/card'
 import { Bone, Activity, HandIcon as Hands, HeartPulse, MonitorIcon as Running, Brain, Diamond, MapPin, Star, Gem } from 'lucide-react'
 import Link from 'next/link'
-import { LayoutPage } from '@/app/dashboard/LayoutPage'
+import LayoutPage from '@/app/dashboard/LayoutPage';
 
 export default function Page(props: {
     params: Promise<{ slug: string; id: string }>;

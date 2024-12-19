@@ -1,56 +1,75 @@
-import React from 'react'
+"use client"
 
-interface CircularProgressBarProps {
+import * as React from "react"
+import { cn } from "@/lib/utils"
+
+interface CircularProgressProps {
     value: number
-    color: string
-    size: 'sm' | 'md' | 'lg'
+    color?: "sky" | "yellow" | "red"
+    size?: "sm" | "md" | "lg"
+    className?: string
+    showValue?: boolean
 }
 
-export const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ value, color, size }) => {
-    const radius = size === 'sm' ? 20 : size === 'md' ? 30 : 40
-    const strokeWidth = size === 'sm' ? 4 : size === 'md' ? 6 : 8
-    const circumference = 2 * Math.PI * radius
+export function CircularProgress({
+    value,
+    color = "sky",
+    size = "md",
+    className,
+    showValue = false,
+}: CircularProgressProps) {
+    const radius = size === "sm" ? 20 : size === "md" ? 25 : 30
+    const strokeWidth = size === "sm" ? 2 : size === "md" ? 2.5 : 3
+    const normalizedRadius = radius - strokeWidth / 2
+    const circumference = normalizedRadius * 2 * Math.PI
+    const strokeDashoffset = circumference - (value / 100) * circumference
 
-    const progress = value / 100
-    const dashoffset = circumference * (1 - progress)
-
-    const sizeClass = size === 'sm' ? 'w-12 h-12' : size === 'md' ? 'w-20 h-20' : 'w-24 h-24'
+    const getColor = (color: string) => {
+        switch (color) {
+            case "sky":
+                return "rgb(37, 126, 190)" // Tailwind lime-500
+            case "yellow":
+                return "rgb(234, 179, 8)" // Tailwind yellow-500
+            case "red":
+                return "rgb(239, 68, 68)" // Tailwind red-500
+            default:
+                return "rgb(37, 126, 190)"
+        }
+    }
 
     return (
-        <div className={`relative ${sizeClass}`}>
-            <svg className="w-full h-full" viewBox="0 0 100 100">
+        <div className={cn("relative inline-flex items-center justify-center", className)}>
+            <svg
+                height={radius * 2}
+                width={radius * 2}
+                className="transform -rotate-90"
+            >
+                {/* Background circle */}
                 <circle
-                    className="text-gray-200"
-                    strokeWidth={strokeWidth}
                     stroke="currentColor"
                     fill="transparent"
-                    r={radius}
-                    cx="50"
-                    cy="50"
+                    strokeWidth={strokeWidth}
+                    r={normalizedRadius}
+                    cx={radius}
+                    cy={radius}
+                    className="text-white/10"
                 />
+                {/* Progress circle */}
                 <circle
-                    className={`text-${color}-600`}
-                    strokeWidth={strokeWidth}
-                    strokeDasharray={circumference}
-                    strokeDashoffset={dashoffset}
-                    strokeLinecap="round"
-                    stroke="currentColor"
+                    stroke={getColor(color)}
                     fill="transparent"
-                    r={radius}
-                    cx="50"
-                    cy="50"
-                    style={{
-                        transformOrigin: '50% 50%',
-                        transform: 'rotate(-90deg)',
-                        transition: 'stroke-dashoffset 0.35s',
-                    }}
+                    strokeWidth={strokeWidth}
+                    strokeDasharray={circumference + " " + circumference}
+                    style={{ strokeDashoffset }}
+                    r={normalizedRadius}
+                    cx={radius}
+                    cy={radius}
+                    className="transition-all duration-300 ease-in-out"
                 />
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-                <span className={`font-semibold ${size === 'sm' ? 'text-xs' : size === 'md' ? 'text-sm' : 'text-lg'} text-gray-700`}>
-                    {value}%
-                </span>
-            </div>
+            {showValue && (
+                <span className="absolute text-sm font-medium text-white">{value}%</span>
+            )}
         </div>
     )
 }

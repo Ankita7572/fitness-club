@@ -1,8 +1,9 @@
 import React from 'react'
-import { LayoutPage } from '../dashboard/LayoutPage'
+
 import { Card } from '@/components/ui/card'
 import { Bone, Activity, HandIcon as Hands, HeartPulse, MonitorIcon as Running, Brain, Diamond, MapPin, Star, Gem } from 'lucide-react'
 import Link from 'next/link'
+import LayoutPage from '../dashboard/LayoutPage'
 
 export default function Consultancy() {
     const services = [

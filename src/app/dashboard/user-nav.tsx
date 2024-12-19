@@ -12,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/firebase/firebase";
 import { signOut } from "firebase/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ChevronDown } from "lucide-react";
 
 export function UserNav() {
     const [userData, setUserData] = useState<any>(null);
@@ -19,19 +21,7 @@ export function UserNav() {
     const [error, setError] = useState<Error | null>(null);
     const router = useRouter();
 
-    useEffect(() => {
-        // Get user data from localStorage
-        const storedUserData = localStorage.getItem("userInfo");
-
-        if (storedUserData) {
-            setUserData(JSON.parse(storedUserData));
-            console.log("data", userData)
-        } else {
-            setError(new Error("User data not found in localStorage"));
-        }
-
-        setLoading(false);
-    }, []); // Runs once when the component mounts
+    // Runs once when the component mounts
 
     const handleSignOut = async () => {
         try {
@@ -44,13 +34,7 @@ export function UserNav() {
     };
 
     // Loading state
-    if (loading) {
-        return (
-            <Button variant="ghost" size="lg" className="relative h-10 w-10 px-0 py-0 rounded-full">
-                <div className="animate-pulse bg-gray-300 rounded-full w-full h-full" />
-            </Button>
-        );
-    }
+  
 
     // Error state
     if (error) {
@@ -64,20 +48,28 @@ export function UserNav() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="lg" className="relative h-10 w-10 px-0 py-0 rounded-full">
-                    <img
-                        src={userData?.photoURL || "/img/default-avatar.jpg"} // Fallback to a default avatar
-                        alt="Avatar"
-                        className="rounded-full object-cover w-full h-full"
-                    />
-                </Button>
+                <div className="flex items-center gap-2 md:gap-3">
+                    <Avatar className="h-8 w-8 md:h-10 md:w-10">
+                        <AvatarImage src="/placeholder.svg" />
+                        <AvatarFallback>JW</AvatarFallback>
+                    </Avatar>
+                    <div className="flex items-center gap-1 md:gap-2">
+                        <span className="text-sm md:text-base font-semibold">Jenny Wilson</span>
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                            <ChevronDown className="h-3 w-3 md:h-4 md:w-4" />
+                        </Button>
+                    </div>
+
+                </div>
+              
+               
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{userData?.displayName || "Full Name"}</p>
+                        <p className="text-sm font-medium leading-none">Ankita Sharma</p>
                         <p className="text-xs leading-none text-muted-foreground">
-                            {userData?.email || "Email"}
+                            ankitadev63@gmail.com
                         </p>
                     </div>
                 </DropdownMenuLabel>
