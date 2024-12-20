@@ -137,27 +137,14 @@ export default function ProfilePage() {
         const file = event.target.files?.[0];
         if (file) {
             const storage = getStorage();
-            const storageRef = ref(storage, `user/${auth.currentUser?.uid}/profile_image`);
+            const storageRef = ref(storage, `user/${auth.currentUser?.email}/profile_image`);
 
             try {
                 // Add file type and size validation
-                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                const maxSize = 5 * 1024 * 1024; // 5MB
-
-                if (!allowedTypes.includes(file.type)) {
-                    toast.error("Invalid file type. Please upload JPEG, PNG, or GIF.");
-                    return;
-                }
-
-                if (file.size > maxSize) {
-                    toast.error("File is too large. Maximum size is 5MB.");
-                    return;
-                }
+               
 
                 const snapshot = await uploadBytes(storageRef, file);
                 const downloadURL = await getDownloadURL(snapshot.ref);
-
-                // Update both avatar state and Firestore
                 setAvatar(downloadURL);
                 setValue('userImage', downloadURL);
 
@@ -188,12 +175,8 @@ export default function ProfilePage() {
 
     return (
         <LayoutPage>
-            <div className="container mx-auto py-8">
-                <Card className="w-full max-w-3xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
-                    <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
-                        <CardTitle className="text-2xl font-bold">User Profile</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6">
+            <div className="container mx-auto p-8">
+                
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             <div className="relative w-24 h-24 max-sm:w-14 max-sm:h-14">
                                 <div className="w-full h-full rounded-full overflow-hidden border border-gray-500 bg-white flex items-center justify-center">
@@ -350,8 +333,7 @@ export default function ProfilePage() {
                                 <Button type="submit">Save Changes</Button>
                             </div>
                         </form>
-                    </CardContent>
-                </Card>
+                   
             </div>
         </LayoutPage>
     );

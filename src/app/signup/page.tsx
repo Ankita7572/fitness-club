@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Phone } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 
@@ -68,7 +68,7 @@ export default function SignupPage() {
             const user = userCredential.user;
 
             // Store user information in Firestore
-            const userRef = doc(db, 'users', user.uid);
+            const userRef = doc(db, 'users', email);
             await setDoc(userRef, {
                 uid: user.uid,
                 displayName,
@@ -83,8 +83,9 @@ export default function SignupPage() {
                 uid: user.uid,
                 displayName: displayName,
                 email: user.email,
+                photoURL: user.photoURL || '',
             };
-            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            localStorage.setItem('user_Info', JSON.stringify(userInfo));
 
             // Redirect to onboarding
             router.push("/login");

@@ -12,7 +12,7 @@ export default function Membership() {
             description:
                 "We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms...",
             students: "25 Per Shift",
-            price: "$80",
+            price: "£80",
         },
         {
             title: "ASTANGA YOGA",
@@ -21,7 +21,7 @@ export default function Membership() {
             description:
                 "We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms...",
             students: "25 Per Shift",
-            price: "$80",
+            price: "£80",
         },
         {
             title: "FITNESS FREE CLASS",
@@ -30,7 +30,7 @@ export default function Membership() {
             description:
                 "We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms...",
             students: "115 Per Shift",
-            price: "$125",
+            price: "£125",
         },
     ]
 

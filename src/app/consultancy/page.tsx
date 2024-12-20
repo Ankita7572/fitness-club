@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Card } from '@/components/ui/card'
-import { Bone, Activity, HandIcon as Hands, HeartPulse, MonitorIcon as Running, Brain, Diamond, MapPin, Star, Gem } from 'lucide-react'
+import { Bone, Activity, HandIcon as Hands, HeartPulse, MonitorIcon as Running, Brain, Diamond, MapPin, Star, Gem, Phone } from 'lucide-react'
 import Link from 'next/link'
 import LayoutPage from '../dashboard/LayoutPage'
 
@@ -33,7 +33,7 @@ export default function Consultancy() {
         {
             id: 4,
             title: "Exercise physiologist",
-            description: "Fitness Assessment | Exercise Prescription ",
+            description: "Fitness Assessment | Exercise Prescription| Health Education ",
             icon: HeartPulse,
             color: "bg-green-100 hover:bg-green-200",
             textColor: "text-green-900",
@@ -59,34 +59,44 @@ export default function Consultancy() {
 
     const experts = [
         {
-            name: "Dr. Sarah Johnson",
-            image: "/img/webpage/gl_1.jpg",
+            id: 1,
+            name: "Amy Harmer",
+            image: "/img/consultant/Amy-Harmer.jpg",
             certification: "DPT, Sports Physiotherapy Specialist",
-            description: "15+ years experience in sports rehabilitation and manual therapy. Specialized in treating professional athletes and complex injuries.",
-            location: "London",
-            rating: "4.9",
-            gems: "25",
-            totalGems: "80"
+            description: "Amy spent a couple of years working alongside an amateur rugby club based in Doncaster providing weekly MSK clinics and pitch-side first aid for first team players.",
+            location: "Northampton, England",
+            contact_number: "01604 601641",
+            
         },
         {
-            name: "Dr. Michael Chen",
-            image: "/img/webpage/gl_1.jpg",
+            id: 2,
+            name: "Lucy Eggleton",
+            image: "/img/consultant/lucy.jpg",
             certification: "MPT, Orthopedic Certified Specialist",
-            description: "Expert in post-surgical rehabilitation and spine care. Former team physiotherapist for national sports teams.",
-            location: "New York",
-            rating: "4.8",
-            gems: "30",
-            totalGems: "65"
+            description: " She has insight and knowledge of multiple sports disciplines, from grassroots to elite level, reinforced by her own prior experiences as a national-level gymnast.",
+            location: "Northampton, England",
+            contact_number: "01604 601641",
+           
         },
         {
-            name: "Dr. Emma Thompson",
-            image: "/img/webpage/gl_1.jpg",
+            id: 3,
+            name: "Marc Evans",
+            image: "/img/consultant/marc.jpg",
             certification: "PhD in Rehabilitation Sciences",
-            description: "Specializes in neurological rehabilitation and chronic pain management. Published researcher in physiotherapy techniques.",
-            location: "Melbourne",
-            rating: "4.7",
-            gems: "20",
-            totalGems: "50"
+            description: "Marc is known for his excellent diagnostic skills and hands-on approach to back and neck issues, sports and work injuries and conditions.",
+            location: "Northampton, England",
+            contact_number: "01604 601641",
+           
+        },
+        {
+            id: 4,
+            name: "Phil Pask",
+            image: "/img/consultant/Phil_Pask.jpg",
+            certification: "PhD in Rehabilitation Sciences",
+            description: "Phil is one of the world’s best Physiotherapists at rehabilitation and the treatment of acute and chronic musculoskeletal injuries.",
+            location: "Northampton, England",
+            contact_number: "01604 601641",
+           
         }
     ];
 
@@ -147,7 +157,7 @@ export default function Consultancy() {
                             <img
                                 src={expert.image}
                                 alt={expert.name}
-                                className="w-12 h-12 rounded-full object-cover"
+                                className="w-16 h-16 rounded-full object-cover"
                             />
 
                             {/* Main Content */}
@@ -174,17 +184,14 @@ export default function Consultancy() {
                                         <span className="text-sm text-gray-600">{expert.location}</span>
                                     </div>
 
-                                    {/* Rating */}
+                                    {/* contact_number */}
                                     <div className="flex items-center gap-1">
-                                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                                        <span className="text-sm text-gray-600">{expert.rating}</span>
+                                        <Phone className="w-4 h-4 text-sky-400 " />
+                                        <span className="text-sm text-gray-600">{expert.contact_number}</span>
                                     </div>
 
                                     {/* Total Gems */}
-                                    <div className="flex items-center gap-1">
-                                        <Gem className="w-4 h-4 text-blue-400 fill-blue-400" />
-                                        <span className="text-sm text-gray-600">{expert.totalGems}</span>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>

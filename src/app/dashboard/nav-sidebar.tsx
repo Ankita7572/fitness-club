@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Home, BarChart2, Calendar, Settings, User2, Bell, ChevronRight, ChevronLeft, Menu, UtensilsCrossed, Stethoscope, User } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Home, BarChart2, Calendar, Settings, User2, Bell, ChevronRight, ChevronLeft, Menu, UtensilsCrossed, Stethoscope, User, LayoutDashboard } from 'lucide-react'
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -18,7 +19,7 @@ import {
 } from "@/components/ui/tooltip"
 
 const navItems = [
-    { href: "/dashboard", icon: Home, label: "Dashboard" },
+    { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/profile", icon: User, label: "Profile" },
     { href: "/consultancy", icon: Stethoscope, label: "Consultancy" },
     { href: "/restaurant", icon: UtensilsCrossed, label: "Restaurants" },
@@ -31,6 +32,7 @@ interface NavSidebarProps {
 
 export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
     const [isMobile, setIsMobile] = useState(false)
+    const pathname = usePathname()
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -38,6 +40,13 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
         window.addEventListener('resize', checkMobile)
         return () => window.removeEventListener('resize', checkMobile)
     }, [])
+
+    const isActive = (href: string) => {
+        if (href === '/') {
+            return pathname === href
+        }
+        return pathname.startsWith(href)
+    }
 
     const SidebarContent = () => (
         <>
@@ -57,12 +66,22 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
                                         className={cn(
                                             "flex h-10 items-center rounded-full",
                                             "hover:bg-[#51acee] hover:text-gray-100 transition-colors",
-                                            index === 0 && "bg-[#257ebe] text-white",
+                                            isActive(item.href) && "bg-[#257ebe] text-white",
                                             isExpanded || isMobile ? "px-3" : "justify-center w-10"
                                         )}
                                     >
-                                        <item.icon className="h-5 w-5 flex-shrink-0" />
-                                        {(isExpanded || isMobile) && <span className="ml-3">{item.label}</span>}
+                                        <item.icon className={cn(
+                                            "h-5 w-5 flex-shrink-0",
+                                            isActive(item.href) && "text-white"
+                                        )} />
+                                        {(isExpanded || isMobile) && (
+                                            <span className={cn(
+                                                "ml-3",
+                                                isActive(item.href) && "font-semibold"
+                                            )}>
+                                                {item.label}
+                                            </span>
+                                        )}
                                     </Link>
                                 </TooltipTrigger>
                                 <TooltipContent side="right" className="bg-zinc-800 text-white">
@@ -82,11 +101,22 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
                                     href="/profile"
                                     className={cn(
                                         "flex h-10 items-center rounded-full hover:bg-zinc-800",
+                                        isActive('/profile') && "bg-[#257ebe] text-white",
                                         isExpanded || isMobile ? "px-3" : "justify-center w-10"
                                     )}
                                 >
-                                    <User2 className="h-5 w-5 flex-shrink-0" />
-                                    {(isExpanded || isMobile) && <span className="ml-3">Profile</span>}
+                                    <User2 className={cn(
+                                        "h-5 w-5 flex-shrink-0",
+                                        isActive('/profile') && "text-white"
+                                    )} />
+                                    {(isExpanded || isMobile) && (
+                                        <span className={cn(
+                                            "ml-3",
+                                            isActive('/profile') && "font-semibold"
+                                        )}>
+                                            Profile
+                                        </span>
+                                    )}
                                 </Link>
                             </TooltipTrigger>
                             <TooltipContent side="right" className="bg-zinc-800 text-white">
@@ -103,7 +133,7 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
         return (
             <Sheet>
                 <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="fixed border rou bg-white text-black left-4 top-4 z-50 md:hidden">
+                    <Button variant="ghost" size="icon" className="fixed border rounded-full bg-white text-black left-4 top-4 z-50 md:hidden">
                         <Menu className="h-5 w-5" />
                     </Button>
                 </SheetTrigger>

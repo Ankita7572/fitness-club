@@ -31,9 +31,9 @@ export interface UserData {
    
     userImage: string;
 }
-async function getUserDetailsFromCollection(uid: string): Promise<Partial<User>> {
+export async function getUserDetailsFromCollection(email: string): Promise<Partial<User>> {
     try {
-        const userDocRef = doc(db, "users", uid);
+        const userDocRef = doc(db, "users", email);
         const userDocSnapshot = await getDoc(userDocRef);
 
         if (!userDocSnapshot.exists()) {
@@ -52,35 +52,39 @@ export async function saveUserData(userData: Partial<UserData>) {
     try {
         const user = auth.currentUser;
         
-        if (!user) {
-            throw new Error("No authenticated user found");
+        if (!user || !user.email) {
+            throw new Error("No authenticated user found or email missing");
         }
 
-        // First, try to get additional user details from users collection
-        const userCollectionDetails = await getUserDetailsFromCollection(user.uid);
+        // First, get user details from users collection
+        const userCollectionDetails = await getUserDetailsFromCollection(user.email);
+
+        // Use displayName from users collection if available, otherwise fallback to auth user's displayName
+        const displayName = userCollectionDetails.displayName || user.displayName || "";
 
         const cleanedData = Object.fromEntries(
             Object.entries({
                 ...userData,
-                email: userCollectionDetails.email || user.email || "",
-                displayName: userCollectionDetails.displayName || user.displayName || "",
-                userId: user.uid,
+                email: user.email,
+                // Explicitly set displayName from users collection
+                displayName: displayName,
                 userImage: userCollectionDetails.photoURL || user.photoURL || "",
                 timestamp: new Date()
             }).filter(([_, value]) => value !== undefined)
         );
 
-        const userDataRef = doc(db, "user_data", user.uid);
+        const userDataRef = doc(db, "user_data", user.email);
         
         await setDoc(userDataRef, cleanedData, { merge: true });
         
-        console.log("User data saved successfully");
+        console.log("User data saved successfully with displayName:", displayName);
         return true;
     } catch (error) {
         console.error("Error saving user data:", error);
         throw error;
     }
 }
+
 
 export async function getUserDataByEmail(email: string): Promise<UserData | null> {
     try {

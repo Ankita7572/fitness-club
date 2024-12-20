@@ -21,8 +21,7 @@ import {
 } from "firebase/auth"
 import app, { db } from "@/lib/firebase/config"
 import { useRouter } from "next/navigation"
-import OnboardingForm from "../onboarding/page"
-import DashboardPage from "../dashboard/page"
+
 import { collection, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore"
 import { toast } from "sonner"
 
@@ -122,8 +121,7 @@ export default function LoginPage() {
             const userInfo = {
                 uid: user.uid,
                 email: user.email,
-                displayName: user.displayName || '',
-                photoURL: user.photoURL || ''
+               
             };
             localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
@@ -175,7 +173,7 @@ export default function LoginPage() {
                 email: user.email || '',
                 photoURL: user.photoURL || ''
             }
-            localStorage.setItem('userInfo', JSON.stringify(userInfo))
+            localStorage.setItem('user_Info', JSON.stringify(userInfo))
 
             router.push("/onboarding")
         } catch (error: any) {
