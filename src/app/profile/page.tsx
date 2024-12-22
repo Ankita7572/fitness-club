@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { auth } from "@/lib/firebase/config";
-import {  getUserDataByEmail, UpdateUserData, UserData } from "@/lib/firebase/firebaseDb";
+import { getUserDataByEmail, UpdateUserData, UserData } from "@/lib/firebase/firebaseDb";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
-import { Camera } from "lucide-react";
+import { Camera } from 'lucide-react';
 import LayoutPage from "../dashboard/LayoutPage";
 
 interface FormData {
@@ -27,7 +27,7 @@ interface FormData {
     activities: string[];
     bmi: number;
     bmiCategory: string;
-    userImage: string;
+
 }
 
 function calculateBMI(weight: number, heightCm: number): number {
@@ -42,7 +42,8 @@ function getBMICategory(bmi: number): string {
     return "Obese";
 }
 
-export default function ProfilePage() {
+
+const ProfilePage = () => {
     const [user, setUser] = useState<any | null>(null);
     const [avatar, setAvatar] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -61,9 +62,15 @@ export default function ProfilePage() {
             activities: [],
             bmi: 0,
             bmiCategory: "",
-            userImage: ""
+
         }
     });
+
+    const recalculateBMI = useCallback((weight: number, heightCm: number) => {
+        const bmi = calculateBMI(weight, heightCm);
+        setValue("bmi", bmi);
+        setValue("bmiCategory", getBMICategory(bmi));
+    }, [setValue]);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -87,7 +94,7 @@ export default function ProfilePage() {
                     setValue("weight", userData.weight || 0);
                     setValue("trainingLevel", userData.trainingLevel || "");
                     setValue("activities", userData.activities || []);
-                    setValue("userImage", userData.userImage || "");
+
 
                     if (userData.weight && userData.heightCm) {
                         const bmi = calculateBMI(userData.weight, userData.heightCm);
@@ -106,7 +113,7 @@ export default function ProfilePage() {
         if (user) {
             try {
                 const updateData: UserData = {
-                    
+
                     displayName: data.displayName,
                     email: data.email,
                     gender: data.gender,
@@ -118,7 +125,7 @@ export default function ProfilePage() {
                     activities: data.activities,
                     bmi: data.bmi,
                     bmiCategory: data.bmiCategory,
-                    userImage: data.userImage,
+
                     heightUnit: "cm",
                     timestamp: new Date()
                 };
@@ -133,208 +140,187 @@ export default function ProfilePage() {
         }
     };
 
-    const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const storage = getStorage();
-            const storageRef = ref(storage, `user/${auth.currentUser?.email}/profile_image`);
 
-            try {
-                // Add file type and size validation
-               
-
-                const snapshot = await uploadBytes(storageRef, file);
-                const downloadURL = await getDownloadURL(snapshot.ref);
-                setAvatar(downloadURL);
-                setValue('userImage', downloadURL);
-
-                if (auth.currentUser) {
-                    const updateData: UserData = {
-                        ...watch(), // Spread existing form values
-                        userImage: downloadURL,
-                        timestamp: new Date(),
-                        heightUnit: "",
-                        
-                    };
-
-                    await UpdateUserData(updateData);
-                    toast.success("Profile image updated successfully");
-                }
-            } catch (error) {
-                console.error("Error uploading file: ", error);
-
-                // More specific error handling
-                if (error instanceof Error) {
-                    toast.error(`Image upload failed: ${error.message}`);
-                } else {
-                    toast.error("Failed to upload image");
-                }
-            }
-        }
-    };
 
     return (
         <LayoutPage>
             <div className="container mx-auto p-8">
-                
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                            <div className="relative w-24 h-24 max-sm:w-14 max-sm:h-14">
-                                <div className="w-full h-full rounded-full overflow-hidden border border-gray-500 bg-white flex items-center justify-center">
-                                    {avatar ? (
-                                        <img
-                                            src={avatar}
-                                            alt="Avatar"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-4xl  text-gray-700 max-sm:text-base">
-                                            AS
-                                        </span>
-                                    )}
-                                </div>
-                                <label
-                                    htmlFor="avatar-upload"
-                                    className="absolute bottom-0 right-0 bg-teal-500 rounded-full p-2 cursor-pointer"
-                                >
-                                    <Camera className="h-5 w-5 max-sm:w-2 max-sm:h-2  text-black" />
-                                    <input
-                                        id="avatar-upload"
-                                        type="file"
-                                        accept="image/*"
 
-                                        className="hidden"
-                                        onChange={handleAvatarChange}
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <Label htmlFor="displayName">Name</Label>
+                            <Controller
+                                name="displayName"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input {...field} className="mt-1" />
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="email">Email</Label>
+                            <Controller
+                                name="email"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input {...field} disabled className="mt-1 bg-gray-100" />
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="age">Age</Label>
+                            <Controller
+                                name="age"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input {...field} type="number" className="mt-1" />
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="gender">Gender</Label>
+                            <Controller
+                                name="gender"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <SelectTrigger className="mt-1">
+                                            <SelectValue placeholder="Select gender" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="male">Male</SelectItem>
+                                            <SelectItem value="female">Female</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="weight">Weight (kg)</Label>
+                            <Controller
+                                name="weight"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        type="number"
+                                        className="mt-1"
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            const heightCm = watch("heightCm");
+                                            if (heightCm) {
+                                                recalculateBMI(Number(e.target.value), heightCm);
+                                            }
+                                        }}
                                     />
-                                </label>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <Label htmlFor="displayName">Name</Label>
-                                    <Controller
-                                        name="displayName"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Input {...field} className="mt-1" />
-                                        )}
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="heightCm">Height (cm)</Label>
+                            <Controller
+                                name="heightCm"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        type="number"
+                                        className="mt-1"
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            const weight = watch("weight");
+                                            if (weight) {
+                                                recalculateBMI(weight, Number(e.target.value));
+                                            }
+                                        }}
                                     />
-                                </div>
-                                <div>
-                                    <Label htmlFor="email">Email</Label>
-                                    <Controller
-                                        name="email"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Input {...field} disabled className="mt-1 bg-gray-100" />
-                                        )}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="age">Age</Label>
-                                    <Controller
-                                        name="age"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Input {...field} type="number" className="mt-1" />
-                                        )}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="gender">Gender</Label>
-                                    <Controller
-                                        name="gender"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                            >
-                                                <SelectTrigger className="mt-1">
-                                                    <SelectValue placeholder="Select gender" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="male">Male</SelectItem>
-                                                    <SelectItem value="female">Female</SelectItem>
-                                                    <SelectItem value="other">Other</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        )}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="weight">Weight (kg)</Label>
-                                    <Controller
-                                        name="weight"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Input {...field} type="number" className="mt-1" />
-                                        )}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="heightCm">Height (cm)</Label>
-                                    <Controller
-                                        name="heightCm"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Input {...field} type="number" className="mt-1" />
-                                        )}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="trainingLevel">Training Level</Label>
-                                    <Controller
-                                        name="trainingLevel"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                            >
-                                                <SelectTrigger className="mt-1">
-                                                    <SelectValue placeholder="Select training level" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="beginner">Beginner</SelectItem>
-                                                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                                                    <SelectItem value="advanced">Advanced</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        )}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="mainGoal">Main Goal</Label>
-                                    <Controller
-                                        name="mainGoal"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                            >
-                                                <SelectTrigger className="mt-1">
-                                                    <SelectValue placeholder="Select main goal" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="weight-loss">Weight Loss</SelectItem>
-                                                    <SelectItem value="muscle-gain">Muscle Gain</SelectItem>
-                                                    <SelectItem value="endurance">Endurance</SelectItem>
-                                                    <SelectItem value="flexibility">Flexibility</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
-                                    Cancel
-                                </Button>
-                                <Button type="submit">Save Changes</Button>
-                            </div>
-                        </form>
-                   
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="trainingLevel">Training Level</Label>
+                            <Controller
+                                name="trainingLevel"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <SelectTrigger className="mt-1">
+                                            <SelectValue placeholder="Select training level" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="beginner">Beginner</SelectItem>
+                                            <SelectItem value="intermediate">Intermediate</SelectItem>
+                                            <SelectItem value="advanced">Advanced</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="mainGoal">Main Goal</Label>
+                            <Controller
+                                name="mainGoal"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <SelectTrigger className="mt-1">
+                                            <SelectValue placeholder="Select main goal" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="weight-loss">Weight Loss</SelectItem>
+                                            <SelectItem value="muscle-gain">Muscle Gain</SelectItem>
+                                            <SelectItem value="endurance">Endurance</SelectItem>
+                                            <SelectItem value="flexibility">Flexibility</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="bmi">BMI</Label>
+                            <Controller
+                                name="bmi"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input {...field} disabled className="mt-1 bg-gray-100" />
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="bmiCategory">BMI Category</Label>
+                            <Controller
+                                name="bmiCategory"
+                                control={control}
+                                render={({ field }) => (
+                                    <Input {...field} disabled className="mt-1 bg-gray-100" />
+                                )}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                        <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" className="bg-sky-600 hover:bg-sky-500">Save Changes</Button>
+                    </div>
+                </form>
+
             </div>
         </LayoutPage>
     );
 }
+
+export default ProfilePage;
+

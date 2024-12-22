@@ -54,7 +54,7 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                     {/* Company Info */}
                     <div className="-mt-6">
-                        <Image src="/img/logo.png" alt='logo' width={120} height={60} className='w-32 h-24' />
+                        <Image src="/img/logo.png" alt='logo' width={120} height={60} className='w-24 h-12 mb-4' />
                         <p className="text-zinc-400">
                             Pluse – Fitness Center is a professional fitness training center. Commercial publishing platforms and content management systems ensure that you can show different text, different data using the same template.
                         </p>

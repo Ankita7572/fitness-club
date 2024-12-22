@@ -78,7 +78,7 @@ export default function LayoutPage({ children }: { children: React.ReactNode }) 
                 isSidebarExpanded && "md:ml-48"
             )}>
                 <Header />
-                <main className="p-4 md:p-6">
+                <main className="">
                     {children}
                 </main>
             </div>

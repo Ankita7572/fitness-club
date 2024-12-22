@@ -17,7 +17,7 @@ export default function Membership() {
         {
             title: "ASTANGA YOGA",
             category: "Yoga & Meditation",
-            image: "/img/webpage/class_4.jpg",
+            image: "/img/webpage/fitness-yoga.webp",
             description:
                 "We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms...",
             students: "25 Per Shift",

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 import { ModeToggle } from '@/components/mode-toggle'
@@ -35,7 +35,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
     const [rememberMe, setRememberMe] = useState(false)
-
+    const [isLoading, setIsLoading] = useState(false); 
     const router = useRouter()
 
     useEffect(() => {
@@ -91,7 +91,7 @@ export default function LoginPage() {
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError(null);
-
+        setIsLoading(true);
         if (!email || !password) {
             setError("Please enter both email and password");
             return;
@@ -106,6 +106,7 @@ export default function LoginPage() {
             const querySnapshot = await getDocs(q);
 
             if (querySnapshot.empty) {
+                setIsLoading(false);
                 setError("No user found with this email");
                 return;
             }
@@ -145,11 +146,14 @@ export default function LoginPage() {
                 errorMessage = "No user found with this email";
             }
             toast.error(errorMessage);
+        } finally {
+            setIsLoading(false); // Set loading to false after login attempt
         }
     }
 
 
     const signInWithGoogle = async () => {
+        setIsLoading(true); 
         const auth = getAuth(app)
         const provider = new GoogleAuthProvider()
         try {
@@ -171,7 +175,7 @@ export default function LoginPage() {
                 uid: user.uid,
                 displayName: user.displayName || '',
                 email: user.email || '',
-                photoURL: user.photoURL || ''
+                
             }
             localStorage.setItem('user_Info', JSON.stringify(userInfo))
 
@@ -183,6 +187,8 @@ export default function LoginPage() {
                 console.error("Error signing in with Google:", error)
                 setError("An error occurred during Google Sign-In")
             }
+        } finally {
+            setIsLoading(false); // Set loading to false after Google sign-in attempt
         }
     }
 
@@ -224,7 +230,7 @@ export default function LoginPage() {
                                     alt="Fitness-club"
                                     width={150}
                                     height={40}
-                                    className="w-32 h-28"
+                                    className="w-24 h-12"
                                 />
 
                             </div>
@@ -304,7 +310,14 @@ export default function LoginPage() {
                                     </div>
 
                                     <Button type="submit" className="w-full bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700">
-                                        Sign in
+                                        {isLoading ? (
+                                            <>
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                Please wait
+                                            </>
+                                        ) : (
+                                            'Sign in'
+                                        )}
                                     </Button>
                                 </form>
 
@@ -350,7 +363,7 @@ export default function LoginPage() {
                                                         fill="#EA4335"
                                                     />
                                                 </svg>
-                                                Sign in with Google
+                                                {isLoading ? 'Please wait' : 'Sign in with Google'}
                                             </Button>
                                         </div>
                                     </div>

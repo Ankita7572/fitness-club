@@ -29,8 +29,26 @@ export interface UserData {
     email: string;
     displayName: string;
    
-    userImage: string;
+    
 }
+export interface DailyPlan {
+    meals: string;
+    exercises: string;
+}
+
+export interface Plan {
+    email: string; // Add this line
+    days: DailyPlan[];
+    proteinIntake: number;
+    carboIntake: number;
+    fatIntake: number;
+    waterIntake: number;
+    calorieIntake: number;
+    createdAt: Date;
+}
+
+
+
 export async function getUserDetailsFromCollection(email: string): Promise<Partial<User>> {
     try {
         const userDocRef = doc(db, "users", email);
@@ -68,7 +86,7 @@ export async function saveUserData(userData: Partial<UserData>) {
                 email: user.email,
                 // Explicitly set displayName from users collection
                 displayName: displayName,
-                userImage: userCollectionDetails.photoURL || user.photoURL || "",
+               
                 timestamp: new Date()
             }).filter(([_, value]) => value !== undefined)
         );
@@ -116,7 +134,7 @@ export async function getUserDataByEmail(email: string): Promise<UserData | null
             email: userData.email || "",
             displayName: userData.displayName || "",
          
-            userImage: userData.userImage || "",
+           
         };
 
         return completeUserData;
@@ -146,3 +164,35 @@ export async function UpdateUserData(data:UserData) {
     toast.error("Error updating profile");
   }
 }
+
+export async function saveFitnessPlan(email: string, plan: Plan) {
+    try {
+        const planDocRef = doc(db, "fitness_plan", email);
+        await setDoc(planDocRef, plan);
+        console.log("Fitness plan saved successfully");
+        return true;
+    } catch (error) {
+        console.error("Error saving fitness plan:", error);
+        throw error;
+    }
+}
+
+export async function getFitnessPlan(email: string): Promise<Plan | null> {
+    try {
+        const planDocRef = doc(db, "fitness_plan", email);
+        const planDocSnapshot = await getDoc(planDocRef);
+
+        if (!planDocSnapshot.exists()) {
+            console.log("No fitness plan found for the given email");
+            return null;
+        }
+
+        return planDocSnapshot.data() as Plan;
+    } catch (error) {
+        console.error("Error fetching fitness plan:", error);
+        throw error;
+    }
+}
+
+
+

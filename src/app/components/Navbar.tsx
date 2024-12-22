@@ -28,7 +28,7 @@ export function Header() {
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-16">
                     <Link href="/" className="flex items-center">
-                        <Image src="/img/logo.png" alt='logo' width={120} height={60} className='w-32 h-24' />
+                        <Image src="/img/logo.png" alt='logo' width={120} height={60} className='w-24 h-12' />
                     </Link>
 
                     <nav className="hidden  items-center space-x-1">

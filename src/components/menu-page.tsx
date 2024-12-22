@@ -96,7 +96,7 @@ export function MenuPage({ items }: MenuPageProps) {
                                     <div className="p-3">
                                         <h3 className="font-medium text-sm mb-1">{item.name}</h3>
                                         <div className="flex items-center justify-between">
-                                            <span className="font-semibold">₹{item.price}</span>
+                                            <span className="font-semibold">£{item.price}</span>
                                             <div className="flex items-center gap-2">
                                                 {cart.find(i => i.id === item.id) ? (
                                                     <div className="flex items-center gap-2">
@@ -179,7 +179,7 @@ export function MenuPage({ items }: MenuPageProps) {
                                             <div className="p-3">
                                                 <h3 className="font-medium text-sm mb-1">{item.name}</h3>
                                                 <div className="flex items-center justify-between">
-                                                    <span className="font-semibold">₹{item.price}</span>
+                                                    <span className="font-semibold">£{item.price}</span>
                                                     <div className="flex items-center gap-2">
                                                         {cart.find(i => i.id === item.id) ? (
                                                             <div className="flex items-center gap-2">
@@ -243,7 +243,7 @@ export function MenuPage({ items }: MenuPageProps) {
                                                     <div className="p-3">
                                                         <h3 className="font-medium text-sm mb-1">{item.name}</h3>
                                                         <div className="flex items-center justify-between">
-                                                            <span className="font-semibold">₹{item.price}</span>
+                                                            <span className="font-semibold">£{item.price}</span>
                                                             <div className="flex items-center gap-2">
                                                                 {cart.find(i => i.id === item.id) ? (
                                                                     <div className="flex items-center gap-2">
@@ -294,7 +294,7 @@ export function MenuPage({ items }: MenuPageProps) {
                             <h3 className="font-semibold">Customer Information</h3>
                             <Info className="h-4 w-4 text-muted-foreground" />
                         </div>
-                        
+
 
                         <h3 className="font-semibold mb-4">Current Order</h3>
                         <div className="space-y-4 mb-6">
@@ -309,7 +309,7 @@ export function MenuPage({ items }: MenuPageProps) {
                                         <h4 className="text-sm font-medium">{item.name}</h4>
                                         <div className="flex items-center justify-between mt-1">
                                             <div>
-                                                <span className="text-sm text-primary">₹{item.price}</span>
+                                                <span className="text-sm text-primary">£{item.price}</span>
                                                 {item.discount && (
                                                     <Badge variant="secondary" className="ml-2 text-xs">
                                                         {item.discount}% off
@@ -348,21 +348,21 @@ export function MenuPage({ items }: MenuPageProps) {
                             <div className="space-y-2 mb-4">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted-foreground">Subtotal</span>
-                                    <span>₹{(subtotal + totalDiscount).toFixed(2)}</span>
+                                    <span>£{(subtotal + totalDiscount).toFixed(2)}</span>
                                 </div>
                                 {totalDiscount > 0 && (
                                     <div className="flex justify-between text-sm">
                                         <span className="text-muted-foreground">Discount Savings</span>
-                                        <span className="text-green-600">-₹{totalDiscount.toFixed(2)}</span>
+                                        <span className="text-green-600">-£{totalDiscount.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted-foreground">Tax (5%)</span>
-                                    <span>₹{tax.toFixed(2)}</span>
+                                    <span>£{tax.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between font-semibold">
                                     <span>Total</span>
-                                    <span className="text-primary">₹{total.toFixed(2)}</span>
+                                    <span className="text-primary">£{total.toFixed(2)}</span>
                                 </div>
                             </div>
                             <Button className="w-full" size="lg">

@@ -14,6 +14,7 @@ import { signOut } from "firebase/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronDown } from "lucide-react";
 import { getUserDetailsFromCollection, UserData } from "@/lib/firebase/firebaseDb";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export function UserNav() {
     const [userData, setUserData] = useState<UserData | null>(null);
@@ -105,13 +106,8 @@ export function UserNav() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 md:gap-3">
-                    <Avatar className="h-8 w-8 md:h-10 md:w-10">
-                        {userData?.userImage ? (
-                            <AvatarImage
-                                src={userData.userImage}
-                                alt={userData?.displayName || "User"}
-                            />
-                        ) : null}
+                    <Avatar className="h-8 w-8 md:h-10 md:w-10 border rounded-full border-gray-600">
+
                         <AvatarFallback>
                             {getInitials(userData?.displayName)}
                         </AvatarFallback>
@@ -145,10 +141,27 @@ export function UserNav() {
                     Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    onClick={handleSignOut}
+
                     className="cursor-pointer text-destructive focus:text-destructive"
                 >
-                    Sign out
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+
+                            Sign out
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure you want to sign out?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    You will be logged out of the fitness club application.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleSignOut} className="bg-red-500">Sign Out</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

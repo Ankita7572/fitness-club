@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
-import { Home, BarChart2, Calendar, Settings, User2, Bell, ChevronRight, ChevronLeft, Menu, UtensilsCrossed, Stethoscope, User, LayoutDashboard } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Home, BarChart2, Calendar, Settings, User2, Bell, ChevronRight, ChevronLeft, Menu, UtensilsCrossed, Stethoscope, User, LayoutDashboard, LogOut, Headphones } from 'lucide-react'
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -17,12 +17,17 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { auth } from '@/lib/firebase/config'
+import { signOut } from 'firebase/auth'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 
 const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { href: "/profile", icon: User, label: "Profile" },
+   
     { href: "/consultancy", icon: Stethoscope, label: "Consultancy" },
     { href: "/restaurant", icon: UtensilsCrossed, label: "Restaurants" },
+    { href: "/fitness-music", icon: Headphones, label: "Vibes" },
+    { href: "/profile", icon: User, label: "Profile" },
 ]
 
 interface NavSidebarProps {
@@ -33,6 +38,7 @@ interface NavSidebarProps {
 export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
     const [isMobile, setIsMobile] = useState(false)
     const pathname = usePathname()
+    const router = useRouter()
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -48,8 +54,19 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
         return pathname.startsWith(href)
     }
 
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            localStorage.removeItem("userInfo");
+            localStorage.removeItem("user_info");
+            router.push('/login');
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
+    };
+
     const SidebarContent = () => (
-        <>
+        <div className="flex flex-col h-full">
             <div className="p-3">
                 <div className="h-8 w-8 invisible rounded-lg bg-sky-700 flex items-center justify-center">
                     <span className="text-black font-bold">N</span>
@@ -76,7 +93,7 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
                                         )} />
                                         {(isExpanded || isMobile) && (
                                             <span className={cn(
-                                                "ml-3",
+                                                "ml-2",
                                                 isActive(item.href) && "font-semibold"
                                             )}>
                                                 {item.label}
@@ -92,41 +109,47 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
                     ))}
                 </div>
             </nav>
-            <div className="p-4">
-                <div className="space-y-2">
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Link
-                                    href="/profile"
-                                    className={cn(
-                                        "flex h-10 items-center rounded-full hover:bg-zinc-800",
-                                        isActive('/profile') && "bg-[#257ebe] text-white",
-                                        isExpanded || isMobile ? "px-3" : "justify-center w-10"
-                                    )}
-                                >
-                                    <User2 className={cn(
-                                        "h-5 w-5 flex-shrink-0",
-                                        isActive('/profile') && "text-white"
-                                    )} />
-                                    {(isExpanded || isMobile) && (
-                                        <span className={cn(
-                                            "ml-3",
-                                            isActive('/profile') && "font-semibold"
-                                        )}>
-                                            Profile
-                                        </span>
-                                    )}
-                                </Link>
-                            </TooltipTrigger>
-                            <TooltipContent side="right" className="bg-zinc-800 text-white">
-                                Profile
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
+            <div className="p-2 mt-auto">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button
+                                        className={cn(
+                                            "flex h-10 items-center rounded-full gap-1 hover:bg-zinc-800 w-full",
+                                            isExpanded || isMobile ? "px-3 justify-start" : "justify-center w-10"
+                                        )}
+                                    >
+                                        <LogOut className="h-5 w-5 flex-shrink-0" />
+                                        {(isExpanded || isMobile) && (
+                                            <span className="ml-1">
+                                                Sign Out
+                                            </span>
+                                        )}
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you sure you want to sign out?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            You will be logged out of the fitness club application.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={handleSignOut} className="bg-red-500">Sign Out</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="bg-zinc-800 text-white">
+                            Sign Out
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </div>
-        </>
+        </div>
     )
 
     if (isMobile) {
@@ -161,4 +184,3 @@ export function NavSidebar({ isExpanded, onToggle }: NavSidebarProps) {
         </div>
     )
 }
-

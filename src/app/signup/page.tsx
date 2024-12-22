@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff, Phone } from 'lucide-react'
+import { Eye, EyeOff, Loader2, Phone } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 
@@ -29,7 +29,7 @@ export default function SignupPage() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
-
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -48,9 +48,10 @@ export default function SignupPage() {
     const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(null);
-
+        setIsLoading(true);
         if (password !== confirmPassword) {
             setError("Passwords do not match");
+            setIsLoading(false);
             return;
         }
 
@@ -61,6 +62,7 @@ export default function SignupPage() {
             const methods = await fetchSignInMethodsForEmail(auth, email);
             if (methods.length > 0) {
                 setError("Email already exists");
+                setIsLoading(false);
                 return;
             }
 
@@ -73,7 +75,7 @@ export default function SignupPage() {
                 uid: user.uid,
                 displayName,
                 email,
-                photoURL: user.photoURL || '',
+               
                 createdAt: serverTimestamp(),
 
             });
@@ -83,7 +85,7 @@ export default function SignupPage() {
                 uid: user.uid,
                 displayName: displayName,
                 email: user.email,
-                photoURL: user.photoURL || '',
+               
             };
             localStorage.setItem('user_Info', JSON.stringify(userInfo));
 
@@ -92,6 +94,8 @@ export default function SignupPage() {
         } catch (error: any) {
             console.error("Error signing up:", error);
             setError("Email already exits");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -118,7 +122,7 @@ export default function SignupPage() {
                 uid: user.uid,
                 displayName: user.displayName || '',
                 email: user.email || '',
-                photoURL: user.photoURL || ''
+                
             }
             localStorage.setItem('user_info', JSON.stringify(userInfo))
 
@@ -159,7 +163,7 @@ export default function SignupPage() {
                             alt="Fitness-club"
                             width={150}
                             height={40}
-                            className="w-32 h-24"
+                            className="w-24 h-12"
                         />
 
                     </div>
@@ -255,8 +259,16 @@ export default function SignupPage() {
                             <Button
                                 type="submit"
                                 className="w-full bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700"
+                                disabled={isLoading}
                             >
-                                Sign up
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Please wait
+                                    </>
+                                ) : (
+                                    'Sign up'
+                                )}
                             </Button>
                         </form>
 

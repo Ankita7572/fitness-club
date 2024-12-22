@@ -40,34 +40,36 @@ const restaurants = [
     {
         id: "4",
         name: "The Night Jar",
-        image: "/img/hotel.jpg",
+        image: "/img/rest1.webp",
         rating: 4.5,
         cuisines: ["Bar Food"],
         priceForTwo: 1200,
         distance: "176 m",
-        discount: 20,
+      
         location: "Leisure Inn Grand Chanakya"
     },
     {
         id: "5",
         name: "KnightHouse",
-        image: "/img/hotel-1.jpg",
+        image: "/img/rest2.webp",
         rating: 4.4,
         cuisines: ["Northampton, England", "Italian", "Continental"],
         priceForTwo: 1500,
         distance: "333 m",
-        discount: 10,
+        
         location: "C Scheme, Jaipur"
     },
     {
         id: "6",
         name: "Clock Tower",
-        image: "/img/hotel-2.jpg",
+        image: "/img/rest3.webp",
         rating: 4.9,
         cuisines: ["Northampton, England", "Continental", "Italian"],
         priceForTwo: 2500,
         distance: "2 km",
+        discount: 10,
         location: "Adarsh Nagar, Jaipur"
+        
     },
     // Add more restaurants as needed
 ]

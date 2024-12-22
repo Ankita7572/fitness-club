@@ -1,40 +1,34 @@
-export interface UserStats {
-  height: number;
-  weight: number;
-  age: number;
-  gender: 'male' | 'female' | 'other';
-  activityLevel: 'sedentary' | 'light' | 'moderate' | 'very' | 'extra';
+export interface Exercise {
+  name: string;
+  sets: number;
+  reps: number;
+  rest: string;
 }
 
-export interface FitnessGoal {
-  type: 'weight-loss' | 'muscle-gain' | 'maintenance';
-  weeklyGoal: number;
-}
-
-export interface WeeklyPlan {
-  week: number;
-  mealPlan: DailyMeal[];
-  exercises: DailyExercise[];
-  waterIntake: number;
-}
-
-export interface DailyMeal {
+export interface DailyPlan {
   day: string;
+  exercises: Exercise[];
+}
+
+export interface MealPlan {
   breakfast: string;
   lunch: string;
   dinner: string;
   snacks: string[];
 }
 
-export interface DailyExercise {
-  day: string;
-  routines: ExerciseRoutine[];
+export interface NutritionGoals {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  water: number;
 }
 
-export interface ExerciseRoutine {
-  name: string;
-  sets: number;
-  reps: number;
-  duration?: number;
+export interface FitnessPlan {
+  exerciseRoutine: DailyPlan[];
+  mealPlan: MealPlan;
+  nutritionGoals: NutritionGoals;
+  recommendations: string[];
 }
 

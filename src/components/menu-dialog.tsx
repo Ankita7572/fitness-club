@@ -77,7 +77,7 @@ export function MenuDialog({ open, onOpenChange, items }: MenuDialogProps) {
                                                         </p>
                                                         <div className="flex items-center gap-2 mt-2">
                                                             <span className="font-semibold">
-                                                                ₹{item.price}
+                                                                £{item.price}
                                                             </span>
                                                             {item.discount && (
                                                                 <Badge variant="secondary">
@@ -127,14 +127,14 @@ export function MenuDialog({ open, onOpenChange, items }: MenuDialogProps) {
                                         <span className="text-sm">
                                             {item.quantity}x {item.name}
                                         </span>
-                                        <span className="text-sm">₹{item.price * item.quantity}</span>
+                                        <span className="text-sm">£{item.price * item.quantity}</span>
                                     </div>
                                 ))}
                             </div>
                             <div className="border-t pt-4 mt-4">
                                 <div className="flex justify-between mb-4">
                                     <span className="font-semibold">Total</span>
-                                    <span className="font-semibold">₹{total}</span>
+                                    <span className="font-semibold">£{total}</span>
                                 </div>
                                 <Button className="w-full">
                                     <ShoppingCart className="mr-2 h-4 w-4" />

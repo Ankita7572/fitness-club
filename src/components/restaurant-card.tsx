@@ -13,7 +13,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         <Link href={`/restaurant/menu/${restaurant.id}`}>
             <Card className="overflow-hidden cursor-pointer transition-transform hover:scale-[1.02]">
                 <CardHeader className="p-0">
-                    <div className="relative aspect-[5/3]">
+                    <div className="relative ">
                         <img
                             src={restaurant.image}
                             alt={restaurant.name}
@@ -38,7 +38,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
                         {restaurant.cuisines.join(", ")}
                     </p>
                     <div className="flex items-center justify-between text-sm">
-                        <span>₹{restaurant.priceForTwo} for two</span>
+                        <span>£{restaurant.priceForTwo} for two</span>
                         <span className="text-muted-foreground">{restaurant.distance}</span>
                     </div>
                 </CardContent>

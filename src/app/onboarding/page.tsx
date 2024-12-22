@@ -235,7 +235,7 @@ export default function OnboardingForm() {
                         alt="Fitness-club"
                         width={100}
                         height={60}
-                        className="h-24 w-32 mb-0 mt-8 ml-12"
+                        className="w-24 h-12 mb-0 mt-8 ml-12"
                     />
 
                 </div>
@@ -265,7 +265,7 @@ export default function OnboardingForm() {
                                     alt="Fitness-club"
                                     width={100}
                                     height={60}
-                                    className="h-24 w-32 mb-0 "
+                                    className="w-24 h-12 mb-0 "
                                 />
 
                             </div>
@@ -280,7 +280,7 @@ export default function OnboardingForm() {
                                     <ArrowLeft className="h-4 w-4" />
                                 </Button>
                                 <span className="text-sm font-semibold mt-2 text-gray-700 dark:text-white">
-                                      {currentStep === 7 ? '' : `Step ${currentStep + 1} of ${steps.length - 1}`}
+                                    {currentStep === 7 ? '' : `Step ${currentStep + 1} of ${steps.length - 1}`}
                                 </span>
                                 <span className="mt-1 text-gray-500 invisible bg-transparent border-none dark:text-gray-400">Skip</span>
                             </div>
