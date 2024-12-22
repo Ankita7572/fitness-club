@@ -363,7 +363,7 @@ export default function LoginPage() {
                                                         fill="#EA4335"
                                                     />
                                                 </svg>
-                                                {isLoading ? 'Please wait' : 'Sign in with Google'}
+                                                Sign in with Google
                                             </Button>
                                         </div>
                                     </div>
