@@ -153,7 +153,7 @@ export default function LoginPage() {
 
 
     const signInWithGoogle = async () => {
-        setIsLoading(true); 
+       
         const auth = getAuth(app)
         const provider = new GoogleAuthProvider()
         try {
@@ -187,9 +187,7 @@ export default function LoginPage() {
                 console.error("Error signing in with Google:", error)
                 setError("An error occurred during Google Sign-In")
             }
-        } finally {
-            setIsLoading(false); // Set loading to false after Google sign-in attempt
-        }
+        } 
     }
 
     // Load remembered email on component mount
