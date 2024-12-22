@@ -50,15 +50,20 @@ export async function PlanGenerator(): Promise<boolean> {
                 exercises: exercises ? exercises.trim() : '',
             });
         }
+        const proteinIntake = parseInt(text.match(/Protein: (\d+)g/)?.[1] || '0') * 6;
+        const carboIntake = parseInt(text.match(/Carbs: (\d+)g/)?.[1] || '0') * 6;
+        const fatIntake = parseInt(text.match(/Fat: (\d+)g/)?.[1] || '0') * 6;
+        const waterIntake = parseInt(text.match(/Water: (\d+)ml/)?.[1] || '0') * 6;
+        const calorieIntake = parseInt(text.match(/Calories: (\d+)kcal/)?.[1] || '0') * 6;
 
         return {
             email,
             days,
-            proteinIntake: parseInt(text.match(/Protein: (\d+)g/)?.[1] || '0'),
-            carboIntake: parseInt(text.match(/Carbs: (\d+)g/)?.[1] || '0'),
-            fatIntake: parseInt(text.match(/Fat: (\d+)g/)?.[1] || '0'),
-            waterIntake: parseInt(text.match(/Water: (\d+)ml/)?.[1] || '0'),
-            calorieIntake: parseInt(text.match(/Calories: (\d+)kcal/)?.[1] || '0'),
+            proteinIntake,
+            carboIntake,
+            fatIntake,
+            waterIntake,
+            calorieIntake,
             createdAt: new Date(),
         };
     };
