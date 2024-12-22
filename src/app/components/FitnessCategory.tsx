@@ -63,7 +63,7 @@ export default function FitnessCategories() {
                                 {hoveredId === category.id ? (
                                     <Button
                                         variant="outline"
-                                        className="border-2 bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300"
+                                        className="border-2 invisible bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300"
                                     >
                                         READ MORE
                                     </Button>

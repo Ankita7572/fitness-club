@@ -1,5 +1,5 @@
 export interface Expert {
-    id: number
+    id: string
     name: string
     image: string
     certification: string

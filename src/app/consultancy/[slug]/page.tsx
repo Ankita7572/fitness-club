@@ -7,8 +7,14 @@ import LayoutPage from '@/app/dashboard/LayoutPage'
 import Link from 'next/link'
 import expertsData from '../expertsData'
 
-export default function Page({ params }: { params: { slug: string } }) {
-    const { slug } = params
+interface PageProps {
+    params: Promise<{
+        slug: string;
+       
+    }>;
+}
+export default async function Page({ params }:PageProps) {
+    const { slug } = await params
     const experts = expertsData[slug] || []
 
     if (experts.length === 0) {

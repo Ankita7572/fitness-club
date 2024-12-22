@@ -4,7 +4,7 @@ import { Expert } from "@/types/experts";
 const expertsData: Record<string, Expert[]> = {
     'orthopedist': [
         {
-            id: 1,
+            id: "1",
             name: "Amy Harmer",
             image: "/img/consultant/Amy-Harmer.jpg",
             certification: "DPT, Sports Physiotherapy Specialist",
@@ -15,7 +15,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "amy.harmer@example.com"
         },
         {
-            id: 2,
+            id: "2",
             name: "John Smith",
             image: "/img/consultant/doc1.jpg",
             certification: "MD, Orthopedic Surgery",
@@ -26,7 +26,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "john.smith@example.com"
         },
         {
-            id: 3,
+            id: "3",
             name: "Sarah Johnson",
             image: "/img/consultant/doc2.jpg",
             certification: "DO, Orthopedic Medicine",
@@ -37,7 +37,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "sarah.johnson@example.com"
         },
         {
-            id: 4,
+            id: "4",
             name: "Michael Chen",
             image: "/img/consultant/doc3.jpg",
             certification: "MD, PhD, Orthopedic Research",
@@ -50,7 +50,7 @@ const expertsData: Record<string, Expert[]> = {
     ],
     'physical-therapist': [
         {
-            id: 1,
+            id: "1",
             name: "Lucy Eggleton",
             image: "/img/consultant/lucy.jpg",
             certification: "MPT, Orthopedic Certified Specialist",
@@ -61,7 +61,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "lucy.eggleton@example.com"
         },
         {
-            id: 2,
+            id: "2",
             name: "Amelia Brown",
             image: "/img/consultant/doc4.jpg",
             certification: "DPT, Certified Hand Therapist",
@@ -72,7 +72,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "anelia.brown@example.com"
         },
         {
-            id: 3,
+            id: "3",
             name: "Devid Wilson",
             image: "/img/consultant/doc5.jpg",
             certification: "MSc, Neurological Rehabilitation Specialist",
@@ -83,7 +83,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "devid.wilson@example.com"
         },
         {
-            id: 4,
+            id: "4",
             name: "Jessy Taylor",
             image: "/img/consultant/doc6.webp",
             certification: "DPT, Sports Certified Specialist",
@@ -96,7 +96,7 @@ const expertsData: Record<string, Expert[]> = {
     ],
     'massage-therapist': [
         {
-            id: 1,
+            id: "1",
             name: "Marc Evans",
             image: "/img/consultant/marc.jpg",
             certification: "PhD in Rehabilitation Sciences",
@@ -107,7 +107,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "marc.evans@example.com"
         },
         {
-            id: 2,
+            id: "2",
             name: "Sophie Green",
             image: "/img/consultant/doc7.jpg",
             certification: "LMT, Certified in Swedish and Deep Tissue Massage",
@@ -118,7 +118,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "sophie.green@example.com"
         },
         {
-            id: 3,
+            id: "3",
             name: "Ryana Cooper",
             image: "/img/consultant/doc8.webp",
             certification: "LMT, Sports Massage Therapist",
@@ -129,7 +129,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "ryana.cooper@example.com"
         },
         {
-            id: 4,
+            id: "4",
             name: "Jesson Lee",
             image: "/img/consultant/doc9.jpg",
             certification: "LMT, Certified in Thai Massage and Reflexology",
@@ -142,7 +142,7 @@ const expertsData: Record<string, Expert[]> = {
     ],
     'exercise-physiologist': [
         {
-            id: 1,
+            id: "1",
             name: "Phil Pask",
             image: "/img/consultant/Phil_Pask.jpg",
             certification: "DPT, Sports Physiotherapy Specialist",
@@ -153,7 +153,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "phil.pask@example.com"
         },
         {
-            id: 2,
+            id: "2",
             name: "Devin Thompson",
             image: "/img/consultant/doc10.jpg",
             certification: "PhD, Exercise Physiology",
@@ -164,7 +164,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "devin.thompson@example.com"
         },
         {
-            id: 3,
+            id: "3",
             name: "Daniel Harris",
             image: "/img/consultant/doc11.jpg",
             certification: "MSc, Clinical Exercise Physiology",
@@ -175,7 +175,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "daniel.harris@example.com"
         },
         {
-            id: 4,
+            id: "4",
             name: "Rachel Foster",
             image: "/img/consultant/doc12.jpg",
             certification: "BSc, Exercise Science, Certified Strength and Conditioning Specialist",
@@ -188,7 +188,7 @@ const expertsData: Record<string, Expert[]> = {
     ],
     "athletic-trainer": [
         {
-            id: 1,
+            id: "1",
             name: "Tom Wilson",
             image: "/img/consultant/doc14.jpg",
             certification: "MSc, Certified Athletic Trainer",
@@ -199,7 +199,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "tom.wilson@example.com"
         },
         {
-            id: 2,
+            id: "2",
             name: "Emily Clark",
             image: "/img/consultant/doc13.jpg",
             certification: "BSc, Certified Strength and Conditioning Specialist",
@@ -210,7 +210,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "emily.clark@example.com"
         },
         {
-            id: 3,
+            id: "3",
             name: "Alex Nguyen",
             image: "/img/consultant/doc15.jpg",
             certification: "DPT, Sports Certified Specialist",
@@ -221,7 +221,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "alex.nguyen@example.com"
         },
         {
-            id: 4,
+            id: "4",
             name: "Samanth Lee",
             image: "/img/consultant/doc16.jpg",
             certification: "MSc, Certified Athletic Trainer, Corrective Exercise Specialist",
@@ -234,7 +234,7 @@ const expertsData: Record<string, Expert[]> = {
     ],
     "physiatrist": [
         {
-            id: 1,
+            id: "1",
             name: "Dr. Robert Johnson",
             image: "/img/consultant/doc17.jpg",
             certification: "MD, Physical Medicine and Rehabilitation",
@@ -245,7 +245,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "robert.johnson@example.com"
         },
         {
-            id: 2,
+            id: "2",
             name: "Dr. Addison Rodriguez",
             image: "/img/consultant/doc18.jpg",
             certification: "MD, Sports Medicine Fellowship",
@@ -256,7 +256,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "addison.rodriguez@example.com"
         },
         {
-            id: 3,
+            id: "3",
             name: "Dr. Andrew Kim",
             image: "/img/consultant/doc19.jpg",
             certification: "MD, Electrodiagnostic Medicine Specialist",
@@ -267,7 +267,7 @@ const expertsData: Record<string, Expert[]> = {
             email: "andrew.kim@example.com"
         },
         {
-            id: 4,
+            id: "4",
             name: "Dr. Elizabeth Taylor",
             image: "/img/consultant/doc20.webp",
             certification: "MD, Pediatric Rehabilitation Specialist",

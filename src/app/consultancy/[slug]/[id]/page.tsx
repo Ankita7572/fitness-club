@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { notFound } from 'next/navigation'
 import { Card } from '@/components/ui/card'
-import { MapPin, Mail, Phone, Briefcase, Star, Calendar, Clock } from 'lucide-react'
+import { MapPin, Mail, Phone, Briefcase } from 'lucide-react'
 import Image from 'next/image'
 import LayoutPage from '@/app/dashboard/LayoutPage'
 import expertsData from '../../expertsData'
@@ -25,8 +25,17 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 
-export default function Page({ params }: { params: { slug: string; id: string } }) {
-    const { slug, id } = params;
+interface PageProps {
+    params: Promise<{
+        slug: string;
+        id: string;
+    }>;
+}
+
+export default async function Page({ params }: PageProps) {
+    const resolvedParams = await params;
+    const { slug, id } = resolvedParams;
+
     const experts = expertsData[slug as keyof typeof expertsData];
 
     if (!experts) {
@@ -92,16 +101,15 @@ export default function Page({ params }: { params: { slug: string; id: string } 
                                 <h3 className="text-xl font-semibold text-gray-900 mb-2">About</h3>
                                 <p className="text-gray-700 mb-4">{expert.description}</p>
                                 <div className='flex justify-between'>
-                                    <div>  <h3 className="text-xl font-semibold text-gray-900 mb-2">Expertise</h3>
+                                    <div>
+                                        <h3 className="text-xl font-semibold text-gray-900 mb-2">Expertise</h3>
                                         <p className="text-gray-700">{expert.certification}</p>
                                     </div>
-
 
                                     <Button onClick={toggleBooking} className="mt-4 bg-sky-500 hover:bg-sky-400">
                                         {isBooking ? 'Hide Booking' : 'Book Consultation'}
                                     </Button>
                                 </div>
-
                             </div>
                         </div>
                     </Card>
@@ -161,4 +169,3 @@ export default function Page({ params }: { params: { slug: string; id: string } 
         </LayoutPage>
     )
 }
-

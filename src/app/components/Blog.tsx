@@ -9,10 +9,10 @@ import "slick-carousel/slick/slick-theme.css"
 const blogPosts = [
     {
         id: 1,
-        title: "Mediation Group Classe Started",
+        title: "Mediation Group Classes Started",
         date: "March 25, 2019",
         author: "admin",
-        excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
+        excerpt: "Discover the benefits of group meditation and how it can transform your daily routine for a healthier mind and body.",
         image: "/img/webpage/post_1.jpg",
     },
     {
@@ -20,7 +20,7 @@ const blogPosts = [
         title: "Ever too late to lose weight?",
         date: "February 22, 2019",
         author: "admin",
-        excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
+        excerpt: "Uncover the myths and truths about weight loss at any age, and start your journey towards a healthier you today.",
         image: "/img/webpage/post_2.jpg",
     },
     {
@@ -28,7 +28,7 @@ const blogPosts = [
         title: "These Men Promptly Escaped",
         date: "February 22, 2019",
         author: "admin",
-        excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
+        excerpt: "A thrilling tale of determination and survival as these individuals defied the odds to find freedom.",
         image: "/img/webpage/post_4.jpg",
     },
     {
@@ -36,10 +36,11 @@ const blogPosts = [
         title: "Advanced Workout Methods",
         date: "February 21, 2019",
         author: "admin",
-        excerpt: "The snatch is a wide-grip, one-move lift. The clean and jerk is a close-grip, two-move lift. Each weightlifter receives three attempts...",
+        excerpt: "Take your fitness routine to the next level with cutting-edge techniques and advanced training methods.",
         image: "/img/webpage/post_5.jpg",
     },
-]
+];
+
 
 export default function Blog() {
     const settings = {
