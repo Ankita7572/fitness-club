@@ -11,7 +11,7 @@ const restaurants = [
         image: "/img/hotel.jpg",
         rating: 4.5,
         cuisines: ["Bar Food"],
-        priceForTwo: 1200,
+        priceForTwo: 100,
         distance: "176 m",
         discount: 20,
         location: "Leisure Inn Grand Chanakya"
@@ -22,7 +22,7 @@ const restaurants = [
         image: "/img/hotel-1.jpg",
         rating: 4.4,
         cuisines: ["Northampton, England", "Italian", "Continental"],
-        priceForTwo: 1500,
+        priceForTwo: 100,
         distance: "333 m",
         discount: 10,
         location: "C Scheme, Jaipur"
@@ -33,7 +33,7 @@ const restaurants = [
         image: "/img/hotel-2.jpg",
         rating: 4.9,
         cuisines: ["Northampton, England", "Continental", "Italian"],
-        priceForTwo: 2500,
+        priceForTwo: 250,
         distance: "2 km",
         location: "Adarsh Nagar, Jaipur"
     },
@@ -43,7 +43,7 @@ const restaurants = [
         image: "/img/rest1.webp",
         rating: 4.5,
         cuisines: ["Bar Food"],
-        priceForTwo: 1200,
+        priceForTwo: 120,
         distance: "176 m",
       
         location: "Leisure Inn Grand Chanakya"
@@ -54,7 +54,7 @@ const restaurants = [
         image: "/img/rest2.webp",
         rating: 4.4,
         cuisines: ["Northampton, England", "Italian", "Continental"],
-        priceForTwo: 1500,
+        priceForTwo: 150,
         distance: "333 m",
         
         location: "C Scheme, Jaipur"
@@ -65,7 +65,7 @@ const restaurants = [
         image: "/img/rest3.webp",
         rating: 4.9,
         cuisines: ["Northampton, England", "Continental", "Italian"],
-        priceForTwo: 2500,
+        priceForTwo: 250,
         distance: "2 km",
         discount: 10,
         location: "Adarsh Nagar, Jaipur"
