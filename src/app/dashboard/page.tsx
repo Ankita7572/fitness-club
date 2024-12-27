@@ -167,21 +167,21 @@ export default function DashboardPage() {
                         <ActivityCard
                             title="Motivational Music"
                             description="Lift your spirits with music that inspires and energizes your day!"
-                            image="/img/dashboard/music.jpg"
+                            image="/img/dashboard/music.webp"
                             className="bg-[#008DDA] text-white"
                             link="/fitness-music"
                         />
                         <ActivityCard
                             title="Daily Exercise"
                             description="A simple daily workout to keep you fit and full of energy."
-                            image="/img/dashboard/exercise.jpg"
+                            image="/img/dashboard/exercise.webp"
                             className="bg-[#41C9E2]"
                             link="#"
                         />
                         <ActivityCard
                             title="Consultant Expert Physiotherapist "
                             description="Connect with experts for personalized care and effective recovery solutions"
-                            image="/img/dashboard/consultant.jpg"
+                            image="/img/dashboard/consultant.webp"
                             className="bg-[#ACE2E1] text-black"
                             link="/consultancy"
                         />

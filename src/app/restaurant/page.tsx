@@ -8,7 +8,7 @@ const restaurants = [
     {
         id: "1",
         name: "The Night Jar",
-        image: "/img/hotel.jpg",
+        image: "/img/hotel.webp",
         rating: 4.5,
         cuisines: ["Bar Food"],
         priceForTwo: 100,
@@ -19,7 +19,7 @@ const restaurants = [
     {
         id: "2",
         name: "KnightHouse",
-        image: "/img/hotel-1.jpg",
+        image: "/img/hotel-1.webp",
         rating: 4.4,
         cuisines: ["Northampton, England", "Italian", "Continental"],
         priceForTwo: 100,
@@ -30,7 +30,7 @@ const restaurants = [
     {
         id: "3",
         name: "Clock Tower",
-        image: "/img/hotel-2.jpg",
+        image: "/img/hotel-2.webp",
         rating: 4.9,
         cuisines: ["Northampton, England", "Continental", "Italian"],
         priceForTwo: 250,
