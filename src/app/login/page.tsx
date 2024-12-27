@@ -162,7 +162,13 @@ export default function LoginPage() {
 
             const userDataRef = doc(db, 'user_data', user.email || '')
             const userDataSnap = await getDoc(userDataRef)
+            const userInfo = {
+                uid: user.uid,
+                displayName: user.displayName || '',
+                email: user.email || '',
 
+            }
+            localStorage.setItem('user_Info', JSON.stringify(userInfo))
             if (userDataSnap.exists()) {
                 // User exists in user_data collection, route to dashboard
                 router.push("/dashboard")
@@ -171,13 +177,7 @@ export default function LoginPage() {
                 router.push("/onboarding")
             }
             // Store user information in localStorage
-            const userInfo = {
-                uid: user.uid,
-                displayName: user.displayName || '',
-                email: user.email || '',
-                
-            }
-            localStorage.setItem('user_Info', JSON.stringify(userInfo))
+           
 
             router.push("/onboarding")
         } catch (error: any) {

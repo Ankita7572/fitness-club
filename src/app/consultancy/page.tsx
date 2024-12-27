@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 
 import { Card } from '@/components/ui/card'
@@ -7,7 +8,8 @@ import LayoutPage from '../dashboard/LayoutPage'
 
 export default function Consultancy() {
     const services = [
-        {id:1,
+        {
+            id: 1,
             title: "Orthopedist",
             description: "Bone & Joint Specialists | Fracture Care | Sports Injuries",
             icon: Bone,
@@ -56,9 +58,6 @@ export default function Consultancy() {
         },
     ]
 
-
-  
-
     const formatRouteTitle = (title: string) => {
         const words = title.split(' ')
         if (words.length === 2) {
@@ -66,6 +65,7 @@ export default function Consultancy() {
         }
         return title.toLowerCase()
     }
+
     return (
         <LayoutPage>
             <div className="container mx-auto p-4">
@@ -73,36 +73,36 @@ export default function Consultancy() {
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
                         Expert Health & Fitness Consultants
                     </h1>
-                    
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {services.map((service) => (
-                        <Link href={`/consultancy/${formatRouteTitle(service.title)}`}>
-                        <Card
+                        <Link
                             key={service.id}
-                            className={`p-6 transition-colors duration-300 ${service.color}`}
+                            href={`/consultancy/${formatRouteTitle(service.title)}`}
+                            className="h-full" // Make Link element full height
                         >
-                            <div className="flex items-start gap-4">
-                                <div className="p-2 rounded-lg bg-white/80">
-                                    <service.icon className={`w-8 h-8 ${service.textColor}`} />
+                            <Card
+                                className={`h-full p-6 transition-colors duration-300 ${service.color}`}
+                            >
+                                <div className="flex items-start gap-4 h-full">
+                                    <div className="p-2 rounded-lg bg-white/80">
+                                        <service.icon className={`w-8 h-8 ${service.textColor}`} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <h3 className={`text-xl font-bold ${service.textColor}`}>
+                                            {service.title}
+                                        </h3>
+                                        <p className={`text-sm ${service.textColor}/80`}>
+                                            {service.description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="space-y-1">
-                                    <h3 className={`text-xl font-bold ${service.textColor}`}>
-                                        {service.title}
-                                    </h3>
-                                    <p className={`text-sm ${service.textColor}/80`}>
-                                        {service.description}
-                                    </p>
-                                </div>
-                            </div>
-                        </Card>
+                            </Card>
                         </Link>
                     ))}
                 </div>
             </div>
-
-            
         </LayoutPage>
     )
 }

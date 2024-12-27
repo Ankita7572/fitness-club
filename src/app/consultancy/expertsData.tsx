@@ -46,6 +46,18 @@ const expertsData: Record<string, Expert[]> = {
             contact_number: "01223 456789",
             profession: "Orthopedist",
             email: "michael.chen@example.com"
+        },
+
+        {
+            id: "5",
+            name: "Jessy Taylor",
+            image: "/img/consultant/doc6.webp",
+            certification: "DPT, Orthopedic Surgery",
+            description: "Jessy works with athletes of all levels to prevent injuries, improve performance, and facilitate return to sport after injury.",
+            location: "Leeds, England",
+            contact_number: "0113 243 0000",
+            profession: "Orthopedist",
+            email: "jessy.taylor@example.com"
         }
     ],
     'physical-therapist': [
@@ -84,14 +96,25 @@ const expertsData: Record<string, Expert[]> = {
         },
         {
             id: "4",
-            name: "Jessy Taylor",
-            image: "/img/consultant/doc6.webp",
+            name: "Oliver Thompson",
+            image: "/img/consultant/doc20.jpg",
             certification: "DPT, Sports Certified Specialist",
-            description: "Jessy works with athletes of all levels to prevent injuries, improve performance, and facilitate return to sport after injury.",
-            location: "Leeds, England",
-            contact_number: "0113 243 0000",
+            description: "Oliver specializes in sports rehabilitation, helping athletes recover from injuries and improve their performance.",
+            location: "Liverpool, England",
+            contact_number: "0151 794 5000",
             profession: "Physical Therapist",
-            email: "jessy.taylor@example.com"
+            email: "oliver.thompson@example.com"
+        },
+        {
+            id: "5",
+            name: "Emma Roberts",
+            image: "/img/consultant/doc22.webp",
+            certification: "MPT, Certified in Vestibular Rehabilitation",
+            description: "Emma focuses on treating balance disorders and dizziness, helping patients regain their stability and confidence.",
+            location: "Newcastle, England",
+            contact_number: "0191 208 6000",
+            profession: "Physical Therapist",
+            email: "emma.roberts@example.com"
         }
     ],
     'massage-therapist': [
@@ -138,6 +161,50 @@ const expertsData: Record<string, Expert[]> = {
             contact_number: "01865 987654",
             profession: "Massage Therapist",
             email: "jesson.patel@example.com"
+        },
+        {
+            id: "5",
+            name: "Oliver Wright",
+            image: "/img/consultant/doc23.webp",
+            certification: "LMT, Certified in Myofascial Release",
+            description: "Oliver specializes in myofascial release techniques to help clients with chronic pain and restricted mobility.",
+            location: "Leeds, England",
+            contact_number: "0113 243 1751",
+            profession: "Massage Therapist",
+            email: "oliver.wright@example.com"
+        },
+        {
+            id: "6",
+            name: "Sophia Chen",
+            image: "/img/consultant/doc24.jpg",
+            certification: "LMT, Certified in Prenatal and Postnatal Massage",
+            description: "Sophia focuses on providing safe and effective massage therapy for expectant mothers and new parents.",
+            location: "Manchester, England",
+            contact_number: "0161 275 2000",
+            profession: "Massage Therapist",
+            email: "sophia.chen@example.com"
+        },
+        {
+            id: "7",
+            name: "Ethan Foster",
+            image: "/img/consultant/doc20.webp",
+            certification: "LMT, Certified in Lymphatic Drainage Massage",
+            description: "Ethan specializes in lymphatic drainage massage to help clients with swelling, inflammation, and detoxification.",
+            location: "Bristol, England",
+            contact_number: "0117 928 9000",
+            profession: "Massage Therapist",
+            email: "ethan.foster@example.com"
+        },
+        {
+            id: "8",
+            name: "Ava Patel",
+            image: "/img/consultant/doc26.webp",
+            certification: "LMT, Certified in Hot Stone Massage",
+            description: "Ava combines traditional massage techniques with hot stone therapy to provide deep relaxation and pain relief.",
+            location: "Birmingham, England",
+            contact_number: "0121 414 3344",
+            profession: "Massage Therapist",
+            email: "ava.patel@example.com"
         }
     ],
     'exercise-physiologist': [
@@ -184,6 +251,61 @@ const expertsData: Record<string, Expert[]> = {
             contact_number: "023 8059 5000",
             profession: "Exercise Physiologist",
             email: "rachel.foster@example.com"
+        },
+        {
+            id: "5",
+            name: "Liam Johnson",
+            image: "/img/consultant/doc27.jpg",
+            certification: "PhD, Exercise Physiology, Certified Clinical Exercise Physiologist",
+            description: "Liam specializes in exercise programs for patients with pulmonary diseases, helping them improve their respiratory function and quality of life.",
+            location: "Edinburgh, Scotland",
+            contact_number: "0131 650 1000",
+            profession: "Exercise Physiologist",
+            email: "liam.johnson@example.com"
+        },
+        {
+            id: "6",
+            name: "Zoe Williams",
+            image: "/img/consultant/doc28.jpg",
+            certification: "MSc, Exercise Physiology, Certified Diabetes Educator",
+            description: "Zoe focuses on developing exercise programs for individuals with diabetes, helping them manage their condition through physical activity.",
+            location: "Cardiff, Wales",
+            contact_number: "029 2087 4000",
+            profession: "Exercise Physiologist",
+            email: "zoe.williams@example.com"
+        },
+        {
+            id: "7",
+            name: "Noah Taylor",
+            image: "/img/consultant/doc29.jpg",
+            certification: "BSc, Exercise Science, Certified Cancer Exercise Trainer",
+            description: "Noah specializes in exercise programs for cancer patients and survivors, helping them improve their strength and endurance during and after treatment.",
+            location: "Glasgow, Scotland",
+            contact_number: "0141 330 2000",
+            profession: "Exercise Physiologist",
+            email: "noah.taylor@example.com"
+        },
+        {
+            id: "8",
+            name: "Isabella Martinez",
+            image: "/img/consultant/doc30.webp",
+            certification: "PhD, Exercise Physiology, Certified in Occupational Physiology",
+            description: "Isabella focuses on improving workplace ergonomics and developing exercise programs to prevent work-related injuries and enhance employee wellness.",
+            location: "Belfast, Northern Ireland",
+            contact_number: "028 9024 5133",
+            profession: "Exercise Physiologist",
+            email: "isabella.martinez@example.com"
+        },
+        {
+            id: "9",
+            name: "Ethan Brown",
+            image: "/img/consultant/doc21.webp",
+            certification: "MSc, Exercise Physiology, Certified Strength and Conditioning Specialist",
+            description: "Ethan specializes in performance enhancement for elite athletes, developing personalized training programs to improve power, speed, and endurance.",
+            location: "Leicester, England",
+            contact_number: "0116 252 2522",
+            profession: "Exercise Physiologist",
+            email: "ethan.brown@example.com"
         }
     ],
     "athletic-trainer": [
@@ -230,6 +352,72 @@ const expertsData: Record<string, Expert[]> = {
             contact_number: "0113 243 1751",
             profession: "Athletic Trainer",
             email: "samantha.lee@example.com"
+        },
+        {
+            id: "5",
+            name: "Olivia White",
+            image: "/img/consultant/doc31.webp",
+            certification: "MSc, Certified Athletic Trainer, Certified Kinesio Taping Practitioner",
+            description: "Olivia specializes in using kinesio taping techniques to support injured muscles and joints, enhancing recovery and performance for athletes.",
+            location: "Nottingham, England",
+            contact_number: "0115 951 5151",
+            profession: "Athletic Trainer",
+            email: "olivia.white@example.com"
+        },
+        {
+            id: "6",
+            name: "Ethan Davis",
+            image: "/img/consultant/doc33.jpeg",
+            certification: "BSc, Certified Athletic Trainer, Certified Functional Strength Coach",
+            description: "Ethan focuses on developing functional strength programs for athletes, improving their overall performance and reducing the risk of injuries.",
+            location: "Sheffield, England",
+            contact_number: "0114 222 2000",
+            profession: "Athletic Trainer",
+            email: "ethan.davis@example.com"
+        },
+        {
+            id: "7",
+            name: "Sophia Anderson",
+            image: "/img/consultant/doc32.jpg",
+            certification: "MSc, Certified Athletic Trainer, Certified in Instrument Assisted Soft Tissue Mobilization",
+            description: "Sophia specializes in using instrument assisted soft tissue mobilization techniques to treat muscle and fascia-related injuries in athletes.",
+            location: "Bristol, England",
+            contact_number: "0117 928 9000",
+            profession: "Athletic Trainer",
+            email: "sophia.anderson@example.com"
+        },
+        {
+            id: "8",
+            name: "Lucas Thompson",
+            image: "/img/consultant/doc34.webp",
+            certification: "DPT, Certified Athletic Trainer, Sports Nutrition Specialist",
+            description: "Lucas combines his expertise in athletic training with sports nutrition to provide comprehensive care for athletes, optimizing both their performance and recovery.",
+            location: "Liverpool, England",
+            contact_number: "0151 794 2000",
+            profession: "Athletic Trainer",
+            email: "lucas.thompson@example.com"
+        },
+        {
+            id: "9",
+            name: "Emma Roberts",
+            image: "/img/consultant/doc35.jpg",
+            certification: "MSc, Certified Athletic Trainer, Certified in Dry Needling",
+            description: "Emma specializes in using dry needling techniques to treat myofascial pain and improve muscle function in athletes.",
+            location: "Newcastle, England",
+            contact_number: "0191 208 6000",
+            profession: "Athletic Trainer",
+            email: "emma.roberts@example.com"
+        },
+        {
+            id: "10",
+            name: "Noah Parker",
+            image: "/img/consultant/doc36.jpg",
+            certification: "BSc, Certified Athletic Trainer, Certified Strength and Conditioning Specialist",
+            description: "Noah focuses on developing sport-specific training programs for athletes, enhancing their power, agility, and overall athletic performance.",
+            location: "Cardiff, Wales",
+            contact_number: "029 2087 4000",
+            profession: "Athletic Trainer",
+            email: "noah.parker@example.com"
         }
     ],
     "physiatrist": [
@@ -265,17 +453,6 @@ const expertsData: Record<string, Expert[]> = {
             contact_number: "0121 371 2000",
             profession: "Physiatrist",
             email: "andrew.kim@example.com"
-        },
-        {
-            id: "4",
-            name: "Dr. Elizabeth Taylor",
-            image: "/img/consultant/doc20.webp",
-            certification: "MD, Pediatric Rehabilitation Specialist",
-            description: "Dr. Taylor specializes in helping children with disabilities and chronic conditions improve their function and quality of life through comprehensive rehabilitation programs.",
-            location: "Bristol, England",
-            contact_number: "0117 923 0000",
-            profession: "Physiatrist",
-            email: "elizabeth.taylor@example.com"
         }
     ]
 };
