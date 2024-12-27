@@ -101,41 +101,61 @@ export default function SignupPage() {
 
 
     const signInWithGoogle = async () => {
-        const auth = getAuth(app)
-        const provider = new GoogleAuthProvider()
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
         try {
-            const result = await signInWithPopup(auth, provider)
-            const user = result.user
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
 
-            const userDataRef = doc(db, 'user_data', user.email || '')
-            const userDataSnap = await getDoc(userDataRef)
+            // Create references to both collections
+            const usersRef = doc(db, 'users', user.email || '');
+            const userDataRef = doc(db, 'user_data', user.email || '');
 
-            if (userDataSnap.exists()) {
-                // User exists in user_data collection, route to dashboard
-                router.push("/dashboard")
-            } else {
-                // User doesn't exist in user_data collection, route to onboarding
-                router.push("/onboarding")
-            }
-            // Store user information in localStorage
+            // Get documents from both collections
+            const usersSnap = await getDoc(usersRef);
+            const userDataSnap = await getDoc(userDataRef);
+
             const userInfo = {
                 uid: user.uid,
                 displayName: user.displayName || '',
                 email: user.email || '',
-                
-            }
-            localStorage.setItem('user_info', JSON.stringify(userInfo))
+            };
 
-            router.push("/onboarding")
+            // Store user information in localStorage
+            localStorage.setItem('user_Info', JSON.stringify(userInfo));
+
+            if (usersSnap.exists()) {
+                // User exists in users collection
+                if (userDataSnap.exists()) {
+                    // User also exists in user_data, route to dashboard
+                    router.push("/dashboard");
+                } else {
+                    // User exists in users but not in user_data, route to onboarding
+                    router.push("/onboarding");
+                }
+            } else {
+                // User doesn't exist in users collection
+                // Store user in users collection
+                await setDoc(doc(db, 'users', user.email || ''), {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    createdAt: serverTimestamp()
+                });
+
+                // Route to onboarding
+                router.push("/onboarding");
+            }
         } catch (error: any) {
             if (error.code === 'auth/popup-closed-by-user') {
-                console.log("Google Sign-In popup was closed before completion")
+                console.log("Google Sign-In popup was closed before completion");
             } else {
-                console.error("Error signing in with Google:", error)
-                setError("An error occurred during Google Sign-In")
+                console.error("Error signing in with Google:", error);
+                setError("An error occurred during Google Sign-In");
             }
         }
-    }
+    };
 
     return (
         <div className="min-h-screen w-full flex bg-white flex-col lg:flex-row dark:bg-gray-900">
