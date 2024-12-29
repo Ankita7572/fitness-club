@@ -159,16 +159,14 @@ export async function PlanGenerator(): Promise<boolean> {
         [Exercise Name 2]: [Detailed description including sets, reps, or duration]
         [Exercise Name 3]: [Detailed description including sets, reps, or duration]
         [Exercise Name 4]: [Detailed description including sets, reps, or duration]
-        [Exercise Name 5]: [Detailed description including sets, reps, or duration]
-        [Exercise Name 6]: [Detailed description including sets, reps, or duration]
-        [Exercise Name 7]: [Detailed description including sets, reps, or duration]
+        [Continue with 5-6 more exercises]
 
         `;
 
         const response = await cohere.generate({
             model: 'command',
             prompt: prompt,
-            maxTokens: 60000,
+            maxTokens: 70000,
             temperature: 0.7,
         });
 
