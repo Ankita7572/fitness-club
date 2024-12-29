@@ -1,6 +1,5 @@
 import { doc, getDoc, query, setDoc, where, collection, getDocs, updateDoc, Timestamp } from "firebase/firestore";
 import { auth, db } from "./firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";
 export interface User{
    userId: string;
@@ -9,7 +8,43 @@ export interface User{
   
     createdAt?:Timestamp;
 }
+export interface MealItem {
+  title: string;
+  description: string;
+}
 
+export interface MealPlan {
+  breakfast: MealItem;
+  lunch: MealItem;
+  dinner: MealItem;
+  snacks: MealItem[];
+}
+
+export interface DailyPlan {
+  dayNumber: number;
+  meals: MealPlan;
+  exercises: Array<{ title: string;
+        description: string;
+        duration?: string;
+        sets?: number;
+        reps?: number; }>;
+}
+
+export interface WeeklyIntake {
+  protein: number;
+  carbs: number;
+  fat: number;
+  water: number;
+  calories: number;
+}
+
+export interface Plan {
+  email: string;
+  days: DailyPlan[];
+  weeklyIntake: WeeklyIntake;
+  createdAt: Date | Timestamp;
+  lastUpdated: Date | Timestamp;
+}
 
 export interface UserData {
      
@@ -31,21 +66,7 @@ export interface UserData {
    
     
 }
-export interface DailyPlan {
-    meals: string;
-    exercises: string;
-}
 
-export interface Plan {
-    email: string; // Add this line
-    days: DailyPlan[];
-    proteinIntake: number;
-    carboIntake: number;
-    fatIntake: number;
-    waterIntake: number;
-    calorieIntake: number;
-    createdAt: Date;
-}
 
 
 
@@ -168,11 +189,16 @@ export async function UpdateUserData(data:UserData) {
 export async function saveFitnessPlan(email: string, plan: Plan) {
     try {
         const planDocRef = doc(db, "fitness_plan", email);
-        await setDoc(planDocRef, plan);
-        console.log("Fitness plan saved successfully");
+        const planToSave = {
+            ...plan,
+            lastUpdated: new Date()
+        };
+        await setDoc(planDocRef, planToSave);
+        toast.success("Fitness plan saved successfully");
         return true;
     } catch (error) {
         console.error("Error saving fitness plan:", error);
+        toast.error("Failed to save fitness plan");
         throw error;
     }
 }
@@ -183,16 +209,84 @@ export async function getFitnessPlan(email: string): Promise<Plan | null> {
         const planDocSnapshot = await getDoc(planDocRef);
 
         if (!planDocSnapshot.exists()) {
-            console.log("No fitness plan found for the given email");
             return null;
         }
 
-        return planDocSnapshot.data() as Plan;
+        const planData = planDocSnapshot.data() as Plan;
+        
+        // Ensure the plan data structure is complete
+        return {
+            ...planData,
+            days: planData.days.map((day, index) => ({
+                ...day,
+                dayNumber: index + 1,
+                meals: {
+                    breakfast: day.meals.breakfast || { title: '', description: '' },
+                    lunch: day.meals.lunch || { title: '', description: '' },
+                    dinner: day.meals.dinner || { title: '', description: '' },
+                    snacks: day.meals.snacks || []
+                },
+                exercises: Array.isArray(day.exercises) ? day.exercises : []
+            })),
+            weeklyIntake: {
+                protein: planData.weeklyIntake?.protein || 0,
+                carbs: planData.weeklyIntake?.carbs || 0,
+                fat: planData.weeklyIntake?.fat || 0,
+                water: planData.weeklyIntake?.water || 0,
+                calories: planData.weeklyIntake?.calories || 0
+            },
+            lastUpdated: planData.lastUpdated || planData.createdAt
+        };
     } catch (error) {
         console.error("Error fetching fitness plan:", error);
         throw error;
     }
 }
 
+export function calculateWeeklyIntake(bmi: number): WeeklyIntake {
+  let baseCalories: number;
+  let proteinMultiplier: number;
+  let carbsMultiplier: number;
+  let fatMultiplier: number;
 
+  if (bmi < 18.5) {
+    // Underweight
+    baseCalories = 2500;
+    proteinMultiplier = 2.2;
+    carbsMultiplier = 3;
+    fatMultiplier = 0.8;
+  } else if (bmi >= 18.5 && bmi < 25) {
+    // Normal weight
+    baseCalories = 2200;
+    proteinMultiplier = 1.8;
+    carbsMultiplier = 2.5;
+    fatMultiplier = 0.7;
+  } else if (bmi >= 25 && bmi < 30) {
+    // Overweight
+    baseCalories = 2000;
+    proteinMultiplier = 1.6;
+    carbsMultiplier = 2;
+    fatMultiplier = 0.6;
+  } else {
+    // Obese
+    baseCalories = 1800;
+    proteinMultiplier = 1.4;
+    carbsMultiplier = 1.5;
+    fatMultiplier = 0.5;
+  }
+
+  const weeklyCalories = baseCalories * 7;
+  const weeklyProtein = Math.round(proteinMultiplier * 7 * 70); // Assuming 70kg as a base weight
+  const weeklyCarbs = Math.round(carbsMultiplier * 7 * 70);
+  const weeklyFat = Math.round(fatMultiplier * 7 * 70);
+  const weeklyWater = 2000 * 7; // 2 liters per day
+
+  return {
+    protein: weeklyProtein,
+    carbs: weeklyCarbs,
+    fat: weeklyFat,
+    water: weeklyWater,
+    calories: weeklyCalories
+  };
+}
 

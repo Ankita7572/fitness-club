@@ -1,5 +1,6 @@
 "use client"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+import { Card, CardContent } from "@/components/ui/card"
 import LayoutPage from "./LayoutPage"
 import { CircularProgress } from "@/components/ui/circular-progress"
 import { Droplet, FlameIcon as Fire, Loader2, Scale } from 'lucide-react'
@@ -7,10 +8,8 @@ import { ActivityCard } from "./activity-card"
 import { auth } from "@/lib/firebase/config"
 import { getFitnessPlan, Plan } from "@/lib/firebase/firebaseDb"
 import { useEffect, useState } from "react"
-import { SixDayPlanDisplay } from "./SixDayPlanDisplay"
-import Image from "next/image"
+import { SevenDayPlan } from "./SevenDayPlan"
 import { PlanGenerator } from "./plan-generator"
-
 
 export default function DashboardPage() {
     const [plan, setPlan] = useState<Plan | null>(null);
@@ -97,6 +96,15 @@ export default function DashboardPage() {
         );
     }
 
+    const weeklyIntake = plan.weeklyIntake;
+    const dailyIntake = {
+        calories: Math.round(weeklyIntake.calories / 7),
+        protein: Math.round(weeklyIntake.protein / 7),
+        carbs: Math.round(weeklyIntake.carbs / 7),
+        fat: Math.round(weeklyIntake.fat / 7),
+        water: Math.round(weeklyIntake.water / 7)
+    };
+
     return (
         <LayoutPage>
             <div className="max-w-7xl mx-auto space-y-6 p-4 md:p-6">
@@ -107,25 +115,33 @@ export default function DashboardPage() {
                         <div className="mb-4 md:mb-6">
                             <div className="text-[#51acee] mb-2 text-sm md:text-base">Your daily calorie target</div>
                             <div className="text-gray-400 text-sm">Recommended intake</div>
-                            <div className="text-2xl md:text-4xl font-bold mt-2">1450 kcal</div>
+                            <div className="text-2xl md:text-4xl font-bold mt-2">{dailyIntake.calories} kcal</div>
                         </div>
                         <div className="grid grid-cols-3 gap-2 md:gap-4">
-                            {[
-                                { label: "Protein", value: plan.proteinIntake, color: "sky" },
-                                { label: "Carbs", value: plan.carboIntake, color: "yellow" },
-                                { label: "Fat", value: plan.fatIntake, color: "red" }
-                            ].map((item, index) => (
+                            {(() => {
+                                const total = dailyIntake.protein + dailyIntake.carbs + dailyIntake.fat;
+                                return [
+                                    { label: "Protein", value: (dailyIntake.protein / total) * 100, actual: dailyIntake.protein, color: "sky" },
+                                    { label: "Carbs", value: (dailyIntake.carbs / total) * 100, actual: dailyIntake.carbs, color: "yellow" },
+                                    { label: "Fat", value: (dailyIntake.fat / total) * 100, actual: dailyIntake.fat, color: "red" }
+                                ];
+                            })().map((item, index) => (
                                 <div key={index} className="text-center">
                                     <CircularProgress
-                                        value={item.value}
+                                        value={parseFloat(item.value.toFixed(2))}
                                         color={item.color as "sky" | "yellow" | "red"}
                                         showValue
                                         size="lg"
+                                        // Show percentage inside the circle
                                     />
-                                    <div className="mt-1 md:mt-2 text-xs md:text-sm">{item.label}</div>
+                                    <div className="mt-1 md:mt-2 text-xs md:text-sm">
+                                        {item.label}: {item.actual}g
+                                    </div>
                                 </div>
                             ))}
                         </div>
+
+
                     </Card>
 
                     {/* Daily Targets */}
@@ -133,9 +149,9 @@ export default function DashboardPage() {
                         <h2 className="text-lg md:text-xl font-semibold">My Daily Target</h2>
                         <div className="grid grid-cols-2 gap-3 md:gap-4">
                             {[
-                                { icon: Droplet, label: "Water", value: `2956 ml`, subLabel: "Daily Target" },
-                                { icon: Fire, label: "Calories", value: `1847 kCal`, subLabel: "Daily Target" },
-                                { icon: Scale, label: "Protein", value: `${plan.proteinIntake}g`, subLabel: "Daily Target" },
+                                { icon: Droplet, label: "Water", value: `${dailyIntake.water} ml`, subLabel: "Daily Target" },
+                                { icon: Fire, label: "Calories", value: `${dailyIntake.calories} kCal`, subLabel: "Daily Target" },
+                                { icon: Scale, label: "Protein", value: `${dailyIntake.protein}g`, subLabel: "Daily Target" },
                             ].map((item, index) => (
                                 <Card key={index} className="p-3 md:p-4 rounded-3xl">
                                     <div className="flex items-start gap-3 md:gap-4">
@@ -154,8 +170,8 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                {/* 6-Day Plan Display */}
-                <SixDayPlanDisplay plan={plan} />
+                {/* 7-Day Plan Display */}
+                <SevenDayPlan plan={plan} />
 
                 {/* New Activity Section */}
                 <div className="mt-6 md:mt-8">

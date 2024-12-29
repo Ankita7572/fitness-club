@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { DailyPlan, getUserDataByEmail, Plan } from '@/lib/firebase/firebaseDb';
+import { DailyPlan, getUserDataByEmail, MealPlan, Plan, saveFitnessPlan, calculateWeeklyIntake } from '@/lib/firebase/firebaseDb';
 import { auth, db } from '@/lib/firebase/config';
 import { CohereClient } from 'cohere-ai';
 import { doc, setDoc } from 'firebase/firestore';
@@ -11,75 +11,126 @@ const cohere = new CohereClient({
     token: "MEjWAKX9UH75w4RPSZpSvJrziJbYDwREgEu5Qear",
 });
 
+const parseMealFromText = (text: string): { title: string; description: string } => {
+    const [title, ...descriptionParts] = text.split(':').map(s => s.trim());
+    return {
+        title: title || '',
+        description: descriptionParts.join(':').trim()
+    };
+};
+
+const parseMealsFromText = (text: string): MealPlan => {
+    const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
+    const mealPlan: MealPlan = {
+        breakfast: { title: '', description: '' },
+        lunch: { title: '', description: '' },
+        dinner: { title: '', description: '' },
+        snacks: []
+    };
+
+    let currentSection = '';
+    lines.forEach(line => {
+        if (line.toLowerCase().startsWith('breakfast')) {
+            currentSection = 'breakfast';
+            mealPlan.breakfast = parseMealFromText(line.substring(9));
+        } else if (line.toLowerCase().startsWith('lunch')) {
+            currentSection = 'lunch';
+            mealPlan.lunch = parseMealFromText(line.substring(6));
+        } else if (line.toLowerCase().startsWith('dinner')) {
+            currentSection = 'dinner';
+            mealPlan.dinner = parseMealFromText(line.substring(7));
+        } else if (line.toLowerCase().includes('snack')) {
+            mealPlan.snacks.push(parseMealFromText(line));
+        }
+    });
+
+    return mealPlan;
+};
+
+const parseExercisesFromText = (text: string): Array<{ title: string; description: string }> => {
+    if (!text) return [];
+
+    return text.split('\n')
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(exercise => {
+            const [title, ...descriptionParts] = exercise.split(':').map(s => s.trim());
+            return {
+                title: title || '',
+                description: descriptionParts.join(':').trim() || exercise
+            };
+        });
+};
+
+const parsePlanFromText = (text: string, email: string, bmi: number): Plan => {
+    const dayRegex = /Day (\d+):([\s\S]*?)(?=Day \d+:|$)/g;
+    const days: DailyPlan[] = [];
+    let match;
+
+    while ((match = dayRegex.exec(text)) !== null) {
+        const [, dayNumber, content] = match;
+        const [mealsText, exercisesText] = content.split(/Exercise:/i);
+
+        days.push({
+            dayNumber: parseInt(dayNumber),
+            meals: parseMealsFromText(mealsText),
+            exercises: parseExercisesFromText(exercisesText)
+        });
+    }
+
+    // Ensure we have 7 days
+    while (days.length < 7) {
+        days.push({
+            dayNumber: days.length + 1,
+            meals: {
+                breakfast: { title: '', description: '' },
+                lunch: { title: '', description: '' },
+                dinner: { title: '', description: '' },
+                snacks: []
+            },
+            exercises: []
+        });
+    }
+
+    // Calculate weekly intake based on BMI
+    const weeklyIntake = calculateWeeklyIntake(bmi);
+
+    return {
+        email,
+        days,
+        weeklyIntake,
+        createdAt: new Date(),
+        lastUpdated: new Date()
+    };
+};
+
+const getEmail = (): string | null => {
+    const user = auth.currentUser;
+    if (user?.email) return user.email;
+
+    if (typeof window === 'undefined') return null;
+
+    try {
+        const userInfo = localStorage.getItem("userInfo");
+        if (userInfo) {
+            const parsed = JSON.parse(userInfo);
+            if (parsed.email) return parsed.email;
+        }
+
+        const user_info = localStorage.getItem("user_info");
+        if (user_info) {
+            const parsed = JSON.parse(user_info);
+            if (parsed.email) return parsed.email;
+        }
+    } catch (e) {
+        console.error('Error parsing stored data:', e);
+    }
+
+    return null;
+};
+
+
 export async function PlanGenerator(): Promise<boolean> {
-    const getEmail = (): string | null => {
-        const user = auth.currentUser;
-        if (user?.email) return user.email;
-
-        if (typeof window === 'undefined') return null;
-
-        try {
-            const userInfo = localStorage.getItem("userInfo");
-            if (userInfo) {
-                const parsed = JSON.parse(userInfo);
-                if (parsed.email) return parsed.email;
-            }
-
-            const user_info = localStorage.getItem("user_info");
-            if (user_info) {
-                const parsed = JSON.parse(user_info);
-                if (parsed.email) return parsed.email;
-            }
-        } catch (e) {
-            console.error('Error parsing stored data:', e);
-        }
-
-        return null;
-    };
-
-    const parsePlanFromText = (text: string, email: string): Plan => {
-        const dayRegex = /Day (\d+):([\s\S]*?)(?=Day \d+:|$)/g;
-        const days: DailyPlan[] = [];
-        let match;
-
-        while ((match = dayRegex.exec(text)) !== null) {
-            const [, , content] = match;
-            const [meals, exercises] = content.split(/Exercise:/i);
-            days.push({
-                meals: meals.trim(),
-                exercises: exercises ? exercises.trim() : '',
-            });
-        }
-        const proteinIntake = parseInt(text.match(/Protein: (\d+)g/)?.[1] || '0') * 6;
-        const carboIntake = parseInt(text.match(/Carbs: (\d+)g/)?.[1] || '0') * 6;
-        const fatIntake = parseInt(text.match(/Fat: (\d+)g/)?.[1] || '0') * 6;
-        const waterIntake = parseInt(text.match(/Water: (\d+)ml/)?.[1] || '0') * 6;
-        const calorieIntake = parseInt(text.match(/Calories: (\d+)kcal/)?.[1] || '0') * 6;
-
-        return {
-            email,
-            days,
-            proteinIntake,
-            carboIntake,
-            fatIntake,
-            waterIntake,
-            calorieIntake,
-            createdAt: new Date(),
-        };
-    };
-
-    const savePlanToFirebase = async (plan: Plan): Promise<void> => {
-        try {
-            const planDocRef = doc(db, "fitness_plan", plan.email);
-            await setDoc(planDocRef, plan);
-            toast.success("Plan saved successfully!");
-        } catch (error) {
-            console.error("Error saving plan to Firebase:", error);
-            toast.error("Failed to save plan. Please try again.");
-            throw error;
-        }
-    };
-
     const email = getEmail();
 
     if (!email) {
@@ -94,44 +145,41 @@ export async function PlanGenerator(): Promise<boolean> {
             return false;
         }
 
-        const prompt = `Generate a 6-day meal plan and daily exercise routine for a ${userData.age}-year-old ${userData.gender} with a BMI of ${userData.bmi.toFixed(1)} (${userData.bmiCategory}). Their main goal is ${userData.mainGoal}, and their training level is ${userData.trainingLevel}. Include daily protein, carb, fat, water, and calorie intake recommendations.
+        const prompt = `Create a detailed 7-day fitness plan for a ${userData.age}-year-old ${userData.gender} with BMI ${userData.bmi.toFixed(1)} (${userData.bmiCategory}). Goal: ${userData.mainGoal}. Training level: ${userData.trainingLevel}. Preferred activities: ${userData.activities.join(', ')}.
 
-        Format the response as follows:
-        Day 1: [Meals for day 1]
-        Exercise: [Exercises for day 1]
-        Day 2: [Meals for day 2]
-        Exercise: [Exercises for day 2]
-        Day 3: [Meals for day 3]
-        Exercise: [Exercises for day 3]
-        Day 4: [Meals for day 4]
-        Exercise: [Exercises for day 4]
-        Day 5: [Meals for day 5]
-        Exercise: [Exercises for day 5]
-        Day 6: [Meals for day 6]
-        Exercise: [Exercises for day 6]
-        
-        Daily Intake:
-        Protein: [X]g
-        Carbs: [X]g
-        Fat: [X]g
-        Water: [X]ml
-        Calories: [X]kcal`;
+        Format for each day:
+        Day [1-7]:
+        Breakfast: [Meal Name]: [Detailed description including portions]
+        Morning Snack: [Snack Name]: [Description]
+        Lunch: [Meal Name]: [Detailed description including portions]
+        Afternoon Snack: [Snack Name]: [Description]
+        Dinner: [Meal Name]: [Detailed description including portions]
+        Exercise:
+        [Exercise Name 1]: [Detailed description including sets, reps, or duration]
+        [Exercise Name 2]: [Detailed description including sets, reps, or duration]
+        [Exercise Name 3]: [Detailed description including sets, reps, or duration]
+        [Exercise Name 4]: [Detailed description including sets, reps, or duration]
+        [Exercise Name 5]: [Detailed description including sets, reps, or duration]
+        [Exercise Name 6]: [Detailed description including sets, reps, or duration]
+        [Exercise Name 7]: [Detailed description including sets, reps, or duration]
+
+        `;
 
         const response = await cohere.generate({
             model: 'command',
             prompt: prompt,
-            maxTokens: 10000,
+            maxTokens: 60000,
             temperature: 0.7,
         });
 
         const generatedText = response.generations[0].text;
-        const parsedPlan = parsePlanFromText(generatedText, email);
+        const parsedPlan = parsePlanFromText(generatedText, email, userData.bmi);
+        await saveFitnessPlan(email, parsedPlan);
 
-        await savePlanToFirebase(parsedPlan);
         return true;
     } catch (err: any) {
         console.error('Error generating or saving plan:', err);
-        toast.error(err.message || 'Failed to generate or save plan. Please try again later.');
+        toast.error(err.message || 'Failed to generate or save plan');
         return false;
     }
 }

@@ -1,68 +1,65 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plan } from '@/lib/firebase/firebaseDb'
+import { Plan, MealPlan } from '@/lib/firebase/firebaseDb'
 import AvatarCircles from '@/components/ui/avatar-circles'
 
-
-interface SixDayPlanDisplayProps {
+interface SevenDayPlanProps {
     plan: Plan
 }
 
-export function SixDayPlanDisplay({ plan }: SixDayPlanDisplayProps) {
+export function SevenDayPlan({ plan }: SevenDayPlanProps) {
     const [activeDay, setActiveDay] = useState("1")
 
-    const formatMeals = (meals: string) => {
-        const mealTypes = ["Breakfast", "Lunch", "Dinner", "Snack"]
-        let formattedMeals = meals.split('\n').filter(meal => meal.trim() !== '')
-
+    const formatMeals = (meals: MealPlan) => {
         return (
             <div className="space-y-4">
-                {mealTypes.map((type, index) => (
-                    <div key={type}>
-                        <h4 className="font-semibold text-sm">{type}</h4>
-                        <p className="text-sm">{formattedMeals[index] || 'Not specified'}</p>
+                <div>
+                    <h4 className="font-semibold text-sm">Breakfast</h4>
+                    <p className="text-sm">{meals.breakfast.title}: {meals.breakfast.description}</p>
+                </div>
+                <div>
+                    <h4 className="font-semibold text-sm">Lunch</h4>
+                    <p className="text-sm">{meals.lunch.title}: {meals.lunch.description}</p>
+                </div>
+                <div>
+                    <h4 className="font-semibold text-sm">Dinner</h4>
+                    <p className="text-sm">{meals.dinner.title}: {meals.dinner.description}</p>
+                </div>
+                {meals.snacks.map((snack, index) => (
+                    <div key={index}>
+                        <h4 className="font-semibold text-sm">Snack {index + 1}</h4>
+                        <p className="text-sm">{snack.title}: {snack.description}</p>
                     </div>
                 ))}
             </div>
         )
     }
 
-    const formatExercises = (exercises: string) => {
-        return exercises.split('\n').filter(exercise => exercise.trim() !== '').map((exercise, index) => (
-            <li key={index} className="text-sm">{exercise}</li>
+    const formatExercises = (exercises: Array<{ title: string; description: string }>) => {
+        return exercises.map((exercise, index) => (
+            <li key={index} className="text-sm">
+                <span className="font-semibold">{exercise.title}:</span> {exercise.description}
+            </li>
         ))
     }
 
     const avatars = [
-        {
-            imageUrl: "/img/dashboard/avacado.webp",
-            profileUrl: "#",
-        },
-        {
-            imageUrl: "/img/dashboard/lunch1.webp",
-            profileUrl: "#",
-        },
-        {
-            imageUrl: "/img/dashboard/dinner2.webp",
-            profileUrl: "#",
-        },
-        {
-            imageUrl: "/img/dashboard/breakfast1.webp",
-            profileUrl: "#",
-        },
-        
+        { imageUrl: "/img/dashboard/avacado.webp", profileUrl: "#" },
+        { imageUrl: "/img/dashboard/lunch1.webp", profileUrl: "#" },
+        { imageUrl: "/img/dashboard/dinner2.webp", profileUrl: "#" },
+        { imageUrl: "/img/dashboard/breakfast1.webp", profileUrl: "#" },
     ];
 
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Your 6-Day Fitness Plan</CardTitle>
+                <CardTitle>Your 7-Day Fitness Plan</CardTitle>
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="1" value={activeDay} onValueChange={setActiveDay}>
-                    <TabsList className="grid w-full grid-cols-6 mb-4">
-                        {[1, 2, 3, 4, 5, 6].map((day) => (
+                    <TabsList className="grid w-full grid-cols-7 mb-4">
+                        {[1, 2, 3, 4, 5, 6, 7].map((day) => (
                             <TabsTrigger key={day} value={day.toString()}>
                                 Day {day}
                             </TabsTrigger>

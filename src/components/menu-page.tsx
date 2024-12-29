@@ -6,13 +6,17 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Minus, Plus, Search, Info } from 'lucide-react'
-import type { MenuItem, CartItem } from "@/types/restaurant"
+import { CartItem, MenuItem } from "@/types/restaurant"
+
+
 
 interface MenuPageProps {
     items: MenuItem[]
 }
 
 export function MenuPage({ items }: MenuPageProps) {
+   
+
     const [cart, setCart] = useState<CartItem[]>([])
     const [searchQuery, setSearchQuery] = useState("")
     const categories = Array.from(new Set(items.map(item => item.category)))
@@ -140,7 +144,7 @@ export function MenuPage({ items }: MenuPageProps) {
                     <div>
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-xl font-semibold">Explore Our Best Menu</h2>
-                            <Button variant="link">View All</Button>
+                            <Button variant="link" className="invisible">View All</Button>
                         </div>
                         <Tabs defaultValue={categories[0]}>
                             <TabsList className="flex overflow-x-auto hide-scrollbar mb-6">
@@ -294,6 +298,12 @@ export function MenuPage({ items }: MenuPageProps) {
                             <h3 className="font-semibold">Customer Information</h3>
                             <Info className="h-4 w-4 text-muted-foreground" />
                         </div>
+                        {cart.length > 0 && (
+                            <div className="mb-4 flex">
+                                <p className="text-sm font-medium mr-4">Call for Order:</p>
+                                <p className="text-sm text-primary">+44 20 1234 5678</p>
+                            </div>
+                        )}
 
 
                         <h3 className="font-semibold mb-4">Current Order</h3>
@@ -366,7 +376,7 @@ export function MenuPage({ items }: MenuPageProps) {
                                 </div>
                             </div>
                             <Button className="w-full" size="lg">
-                                Order Now
+                                Call to Order
                             </Button>
                         </div>
                     </div>
