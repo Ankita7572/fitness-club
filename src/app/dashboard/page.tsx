@@ -10,30 +10,28 @@ import { getFitnessPlan, Plan } from "@/lib/firebase/firebaseDb"
 import { useEffect, useState } from "react"
 import { SevenDayPlan } from "./SevenDayPlan"
 import { PlanGenerator } from "./plan-generator"
-
+import { useAuthState } from 'react-firebase-hooks/auth';
 export default function DashboardPage() {
+    const [user, loading, authError] = useAuthState(auth);
     const [plan, setPlan] = useState<Plan | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [planLoading, setPlanLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
 
     useEffect(() => {
         async function fetchOrGeneratePlan() {
-            const user = auth.currentUser;
+            if (loading) return;
+
             let email = user?.email;
 
             if (!email) {
-                const userInfo = localStorage.getItem("userInfo");
-                if (userInfo) {
-                    const parsed = JSON.parse(userInfo);
-                    email = parsed.email;
-                }
-
-                if (!email) {
-                    const user_info = localStorage.getItem("user_info");
-                    if (user_info) {
-                        const parsed = JSON.parse(user_info);
+                const storageKeys = ["userInfo", "user_info"];
+                for (const key of storageKeys) {
+                    const storedInfo = localStorage.getItem(key);
+                    if (storedInfo) {
+                        const parsed = JSON.parse(storedInfo);
                         email = parsed.email;
+                        if (email) break;
                     }
                 }
             }
@@ -52,18 +50,18 @@ export default function DashboardPage() {
                     setError("Failed to fetch or generate fitness plan. Please try again later.");
                     console.error("Error fetching or generating fitness plan:", err);
                 } finally {
-                    setLoading(false);
+                    setPlanLoading(false);
                 }
             } else {
                 setError("No user email found. Please log in.");
-                setLoading(false);
+                setPlanLoading(false);
             }
         }
 
         fetchOrGeneratePlan();
-    }, []);
+    }, [user, loading]);
 
-    if (loading || isGeneratingPlan) {
+    if (loading || planLoading || isGeneratingPlan) {
         return (
             <LayoutPage>
                 <div className="flex justify-center items-center h-screen">
@@ -71,6 +69,16 @@ export default function DashboardPage() {
                     <div className="text-2xl font-semibold">
                         {isGeneratingPlan ? "Generating your fitness plan..." : "Loading your fitness data..."}
                     </div>
+                </div>
+            </LayoutPage>
+        );
+    }
+
+    if (authError) {
+        return (
+            <LayoutPage>
+                <div className="flex justify-center items-center h-screen">
+                    <div className="text-2xl font-semibold text-red-500">Authentication error. Please try logging in again.</div>
                 </div>
             </LayoutPage>
         );
@@ -132,7 +140,7 @@ export default function DashboardPage() {
                                         color={item.color as "sky" | "yellow" | "red"}
                                         showValue
                                         size="lg"
-                                        // Show percentage inside the circle
+                                    // Show percentage inside the circle
                                     />
                                     <div className="mt-1 md:mt-2 text-xs md:text-sm">
                                         {item.label}: {item.actual}g

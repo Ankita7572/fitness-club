@@ -93,9 +93,9 @@ export function MenuPage({ items }: MenuPageProps) {
                                         <Badge className="absolute top-2 left-2 bg-primary">
                                             {item.discount}% OFF
                                         </Badge>
-                                        <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                                        {/* <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
                                             Available: {item.available}
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="p-3">
                                         <h3 className="font-medium text-sm mb-1">{item.name}</h3>
