@@ -28,6 +28,10 @@ export interface DailyPlan {
         duration?: string;
         sets?: number;
         reps?: number; }>;
+  additionalInfo: Array<{ 
+    title: string;
+    description: string;
+  }>;
 }
 
 export interface WeeklyIntake {
@@ -226,7 +230,14 @@ export async function getFitnessPlan(email: string): Promise<Plan | null> {
                     dinner: day.meals.dinner || { title: '', description: '' },
                     snacks: day.meals.snacks || []
                 },
-                exercises: Array.isArray(day.exercises) ? day.exercises : []
+                exercises: Array.isArray(day.exercises) ? day.exercises : [],
+                additionalInfo: Array.isArray(day.additionalInfo) 
+                    ? day.additionalInfo.filter((info, index, self) => 
+                        index === self.findIndex((t) => 
+                            t.title === info.title && t.description === info.description
+                        )
+                    ) 
+                    : []
             })),
             weeklyIntake: {
                 protein: planData.weeklyIntake?.protein || 0,

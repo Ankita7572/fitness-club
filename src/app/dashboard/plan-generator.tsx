@@ -74,7 +74,8 @@ const parsePlanFromText = (text: string, email: string, bmi: number): Plan => {
         days.push({
             dayNumber: parseInt(dayNumber),
             meals: parseMealsFromText(mealsText),
-            exercises: parseExercisesFromText(exercisesText)
+            exercises: parseExercisesFromText(exercisesText),
+            additionalInfo: []
         });
     }
 
@@ -88,7 +89,8 @@ const parsePlanFromText = (text: string, email: string, bmi: number): Plan => {
                 dinner: { title: '', description: '' },
                 snacks: []
             },
-            exercises: []
+            exercises: [],
+            additionalInfo: []
         });
     }
 
@@ -160,7 +162,7 @@ export async function PlanGenerator(): Promise<boolean> {
         [Exercise Name 3]: [Detailed description including sets, reps, or duration]
         [Exercise Name 4]: [Detailed description including sets, reps, or duration]
         [Continue with 5-6 more exercises]
-
+Include any necessary rest periods or additional information as separate items.
         `;
 
         const response = await cohere.generate({
