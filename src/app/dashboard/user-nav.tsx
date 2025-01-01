@@ -94,13 +94,13 @@ export function UserNav() {
         return <Button variant="ghost" size="lg" disabled>Loading...</Button>;
     }
 
-    if (error) {
-        return (
-            <Button variant="destructive" size="lg">
-                Error Loading
-            </Button>
-        );
-    }
+    // if (error) {
+    //     return (
+    //         <Button variant="destructive" size="lg">
+    //             Error Loading
+    //         </Button>
+    //     );
+    // }
 
     return (
         <DropdownMenu>
