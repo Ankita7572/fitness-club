@@ -50,30 +50,18 @@ const parseMealsFromText = (text: string): MealPlan => {
 const parseExercisesFromText = (text: string): Array<{ title: string; description: string }> => {
     if (!text) return [];
 
-    const lines = text.split('\n')
+    return text.split('\n')
         .map(line => line.trim())
-        .filter(Boolean);
-
-    const exercises: Array<{ title: string; description: string }> = [];
-
-    lines.forEach(line => {
-        const [title, ...descriptionParts] = line.split(':').map(s => s.trim());
-        const description = descriptionParts.join(':').trim();
-
-        if (title && description) {
-            // If both title and description are present, add as an exercise
-            exercises.push({ title, description });
-        } else if (title) {
-            // If only title is present, add it as an informational item
-            exercises.push({ title, description: '' });
-        } else if (description) {
-            // If only description is present, add it as an informational item
-            exercises.push({ title: '', description });
-        }
-    });
-
-    return exercises;
+        .filter(Boolean)
+        .map(exercise => {
+            const [title, ...descriptionParts] = exercise.split(':').map(s => s.trim());
+            return {
+                title: title || '',
+                description: descriptionParts.join(':').trim() || exercise
+            };
+        });
 };
+
 
 const parsePlanFromText = (text: string, email: string, bmi: number): Plan => {
     const dayRegex = /Day (\d+):([\s\S]*?)(?=Day \d+:|$)/g;
