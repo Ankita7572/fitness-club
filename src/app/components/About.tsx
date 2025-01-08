@@ -49,7 +49,7 @@ export default function About() {
                         }}
                     >
                         <div>
-                            <h3 className="text-4xl lg:text-5xl font-bold text-[#257ebe]"><NumberTicker value={10} />k</h3>
+                            <h3 className="text-4xl lg:text-5xl font-bold text-[#257ebe]"><NumberTicker value={20} /></h3>
                             <p className="text-gray-600 mt-2">CLIENTS</p>
                         </div>
                         <div>
@@ -57,7 +57,7 @@ export default function About() {
                             <p className="text-gray-600 mt-2">TRAINERS</p>
                         </div>
                         <div>
-                            <h3 className="text-4xl lg:text-5xl font-bold text-[#257ebe]"><NumberTicker value={120} />+</h3>
+                            <h3 className="text-4xl lg:text-5xl font-bold text-[#257ebe]"><NumberTicker value={30} />+</h3>
                             <p className="text-gray-600 mt-2">EQUIPMENTS</p>
                         </div>
                     </div>

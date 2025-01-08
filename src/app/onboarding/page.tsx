@@ -56,16 +56,16 @@ const steps: Step[] = [
 export default function OnboardingForm() {
     const [currentStep, setCurrentStep] = useState(0)
     const [heightUnit, setHeightUnit] = useState("cm");
-    const [heightCm, setHeightCm] = useState(0);
-    const [heightFeet, setHeightFeet] = useState(0);
-    const [heightInches, setHeightInches] = useState(0);
+    const [heightCm, setHeightCm] = useState<number | undefined>(undefined)
+    const [heightFeet, setHeightFeet] = useState<number | undefined>(undefined)
+    const [heightInches, setHeightInches] = useState<number | undefined>(undefined)
     const [mounted, setMounted] = useState(false)
-    const [age, setAge] = useState(0)
+    const [age, setAge] = useState<number | undefined>(undefined)
     const [trainingLevel, setTrainingLevel] = useState("")
     const [activities, setActivities] = useState<string[]>([])
     const [gender, setGender] = useState("")
     const [mainGoal, setMainGoal] = useState("")
-    const [weight, setWeight] = useState(0);
+    const [weight, setWeight] = useState<number | undefined>(undefined)
     const [errorMessage, setErrorMessage] = useState("");
 
     const router = useRouter()
