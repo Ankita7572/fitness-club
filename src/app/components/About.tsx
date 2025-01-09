@@ -27,7 +27,7 @@ export default function About() {
                             About The Pulse Gym
                         </h3>
                         <h2 className="text-4xl lg:text-5xl font-bold leading-tight relative pb-6">
-                            WE ALWAYS PROVIDE BEST FITNESS SERVICE FOR 25 YEARS
+                            WE ALWAYS PROVIDE BEST FITNESS SERVICE 
                             <span className="absolute bottom-0 left-0 w-24 h-1 bg-[#257ebe]"></span>
                         </h2>
                         <div className="space-y-4">

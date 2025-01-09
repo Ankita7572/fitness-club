@@ -44,7 +44,7 @@ export default function Membership() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
                         <h3 className="text-[#257ebe] text-lg font-medium mb-2">Choose Your Classes</h3>
-                        <h2 className="text-white text-3xl md:text-4xl font-bold">OUR POPULAR CLASSES</h2>
+                        <h2 className="text-white text-3xl md:text-4xl font-bold">UPCOMING CLASSES</h2>
                         <div className="w-24 h-1 bg-[#257ebe] mx-auto mt-4"></div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -95,7 +95,7 @@ export default function Footer() {
             {/* Copyright */}
             <div className="container mx-auto px-4 py-6 border-t border-zinc-800">
                 <div className="flex justify-between items-center">
-                    <p className="text-zinc-400">© 2022 Pluse. Designed by Pulse. All Rights Reserved.</p>
+                    <p className="text-zinc-400">© 2024 Pluse. Designed by Pulse. All Rights Reserved.</p>
                     <Button
                         variant="ghost"
                         size="icon"

@@ -10,7 +10,7 @@ const blogPosts = [
     {
         id: 1,
         title: "Mediation Group Classes Started",
-        date: "March 25, 2019",
+        date: "November 22, 2024",
         author: "admin",
         excerpt: "Discover the benefits of group meditation and how it can transform your daily routine for a healthier mind and body.",
         image: "/img/webpage/post_1.jpg",
@@ -18,7 +18,7 @@ const blogPosts = [
     {
         id: 2,
         title: "Ever too late to lose weight?",
-        date: "February 22, 2019",
+        date: "November 24, 2024",
         author: "admin",
         excerpt: "Uncover the myths and truths about weight loss at any age, and start your journey towards a healthier you today.",
         image: "/img/webpage/post_2.jpg",
@@ -26,7 +26,7 @@ const blogPosts = [
     {
         id: 3,
         title: "These Men Promptly Escaped",
-        date: "February 22, 2019",
+        date: "november 26, 2024",
         author: "admin",
         excerpt: "A thrilling tale of determination and survival as these individuals defied the odds to find freedom.",
         image: "/img/webpage/post_4.jpg",
@@ -34,7 +34,7 @@ const blogPosts = [
     {
         id: 4,
         title: "Advanced Workout Methods",
-        date: "February 21, 2019",
+        date: "November 28, 2024",
         author: "admin",
         excerpt: "Take your fitness routine to the next level with cutting-edge techniques and advanced training methods.",
         image: "/img/webpage/post_5.jpg",
