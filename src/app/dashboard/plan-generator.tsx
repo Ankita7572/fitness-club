@@ -170,7 +170,7 @@ Include any necessary rest periods or additional information as separate items.
         const response = await cohere.generate({
             model: 'command',
             prompt: prompt,
-            maxTokens: 80000,
+            maxTokens: 100000,
             temperature: 0.7,
         });
 

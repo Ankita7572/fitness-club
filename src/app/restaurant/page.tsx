@@ -13,6 +13,7 @@ export default function Page() {
         <div className="min-h-screen bg-background">
            
             <main className="container py-6 px-4">
+                    <h1 className="text-5xl max-sm:text-2xl text-black font-bold text-center mb-6">Your Destination for Healthy & Fitness-Friendly Eats</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2">
                     {restaurants.map(restaurant => (
                         <RestaurantCard
