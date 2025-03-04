@@ -9,13 +9,13 @@ import { getFirestore } from "firebase/firestore";
 
 
 export const firebaseConfig = {
-      apiKey: process.env.NEXT_APP_API_KEY,
-  authDomain: process.env.NEXT_APP_AUTH_DOMAIN,
-  projectId: process.env.NEXT_APP_PROJECT_ID,
-  storageBucket: process.env.NEXT_APP_STORAGE_BUCKET",
-  messagingSenderId: process.env.NEXT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_APP_ID,
-  measurementId: "process.env.NEXT_APP_MEASUREMENTID
+      apiKey: "AIzaSyCxkcvGS_WvONZRNky8ZzTpceO1t1lutEs",
+  authDomain: "pulse-fitness-bfac0.firebaseapp.com",
+  projectId: "pulse-fitness-bfac0",
+  storageBucket: "pulse-fitness-bfac0.firebasestorage.app",
+  messagingSenderId: "703836724917",
+  appId: "1:703836724917:web:8fbc2913d36f3a578aa8fc",
+  measurementId: "G-0QGZKG29KN"
  };
 
 // Initialize Firebase
