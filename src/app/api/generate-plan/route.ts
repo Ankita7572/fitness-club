@@ -1,39 +1,51 @@
-import { CohereClient } from "cohere-ai"
-
-const cohere = new CohereClient({
-  token: "MEjWAKX9UH75w4RPSZpSvJrziJbYDwREgEu5Qear",
-})
-
 export async function POST(req: Request) {
   try {
-    const { height, weight, age, activityLevel, goals } = await req.json()
+    const { prompt } = await req.json()
     
-    // Calculate BMI
-    const bmi = weight / ((height / 100) * (height / 100))
-    
-    const prompt = `Generate a detailed 6-day fitness plan (with Sunday as rest day) based on the following information:
-- BMI: ${bmi.toFixed(1)}
-- Age: ${age}
-- Activity Level: ${activityLevel}
-- Goals: ${goals}
+    if (!prompt) {
+      return Response.json({ error: 'Prompt is required' }, { status: 400 })
+    }
 
-Please provide:
-1. Weekly meal plan with portions for 6 days (Monday to Saturday)
-2. Daily exercise routine for 6 days (Monday to Saturday)
-3. Daily water intake recommendation
-4. Weekly progress tracking metrics
-5. Suggestions for light activities or self-care for Sunday (rest day)`
+    const invokeUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
+    const apiKey = process.env.NVIDIA_API_KEY;
 
-    const response = await cohere.generate({
-      model: 'command',
-      prompt,
-      maxTokens: 1000,
-      temperature: 0.7,
-    })
+    if (!apiKey) {
+      throw new Error("NVIDIA_API_KEY is not configured");
+    }
 
-    return Response.json({ plan: response.generations[0].text })
-  } catch (error) {
-    return Response.json({ error: 'Failed to generate plan' }, { status: 500 })
+    const response = await fetch(invokeUrl, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        model: "google/gemma-4-31b-it",
+        chat_template_kwargs: { enable_thinking: false },
+        max_tokens: 2500,
+        stream: false,
+        temperature: 0.7,
+        top_p: 0.95
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(`NVIDIA API Error: ${response.status} - ${errorData}`);
+    }
+
+    const data = await response.json();
+    const generatedText = data.choices[0]?.message?.content;
+
+    if (!generatedText) {
+      throw new Error("Invalid response from NVIDIA API");
+    }
+
+    return Response.json({ text: generatedText })
+  } catch (error: any) {
+    console.error("API Error:", error)
+    return Response.json({ error: error.message || 'Failed to generate plan' }, { status: 500 })
   }
 }
-

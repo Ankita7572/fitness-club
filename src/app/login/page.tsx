@@ -8,7 +8,7 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 import { ModeToggle } from '@/components/mode-toggle'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
     getAuth,
     GoogleAuthProvider,
@@ -50,43 +50,37 @@ export default function LoginPage() {
         setShowPassword(!showPassword)
     }
 
+    // Removed isInitialLoad ref
+
     useEffect(() => {
         const auth = getAuth(app)
         const db = getFirestore(app)
 
-
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                // Store user information in localStorage
-                
-
+            if (user && user.email) {
                 try {
-                    // Check if user exists in Firestore
-                    const userDocRef = doc(collection(db, 'user_data'), user.email!)
+                    // Check if user has completed onboarding
+                    const userDocRef = doc(db, 'user_data', user.email)
                     const userDoc = await getDoc(userDocRef)
-                    if (userDoc.exists()) {
-                        // User exists, redirect to dashboard
+                    
+                    if (userDoc.exists() && userDoc.data().onboardingCompleted) {
                         router.push('/dashboard')
                     } else {
-                        // New user, redirect to onboarding
-                        router.push('/login')
+                        // User hasn't onboarded yet, redirect to onboarding
+                        router.push('/onboarding')
                     }
                 } catch (error) {
                     console.error('Error checking user existence:', error)
-                    // Handle error appropriately
-                    // You might want to redirect to an error page or show a notification
                 }
-            } else {
+            } else if (!user) {
                 // Remove user information from localStorage
                 localStorage.removeItem('userInfo')
-                setUser(null)
-                // Optionally redirect to login page
-                router.push('/login')
+                localStorage.removeItem('user_Info')
             }
         })
 
         return () => unsubscribe()
-    }, [])
+    }, [router])
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -138,7 +132,7 @@ export default function LoginPage() {
                 router.replace("/onboarding");
             }
         } catch (error: any) {
-            console.error("Error signing in:", error);
+            // Remove console.error to prevent Next.js dev overlay
             let errorMessage = "An error occurred during sign in";
             if (error.code === "auth/wrong-password") {
                 errorMessage = "Incorrect password";
@@ -203,8 +197,7 @@ export default function LoginPage() {
             if (error.code === 'auth/popup-closed-by-user') {
                 console.log("Google Sign-In popup was closed before completion");
             } else {
-                console.error("Error signing in with Google:", error);
-                setError("An error occurred during Google Sign-In");
+                setError(error.message || "An error occurred during Google Sign-In");
             }
         }
     };

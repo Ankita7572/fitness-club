@@ -23,6 +23,15 @@ const nextConfig = {
     headers: async () => {
     return [
       {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+        ],
+      },
+      {
         source: '/robots.txt',
         headers: [
           {

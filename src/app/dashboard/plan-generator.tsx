@@ -2,14 +2,8 @@
 import { useState, useEffect } from 'react';
 import { DailyPlan, getUserDataByEmail, MealPlan, Plan, saveFitnessPlan, calculateWeeklyIntake } from '@/lib/firebase/firebaseDb';
 import { auth, db } from '@/lib/firebase/config';
-import { CohereClient } from 'cohere-ai';
 import { doc, setDoc } from 'firebase/firestore';
 import { toast } from 'sonner';
-
-// The API key should be in environment variables
-const cohere = new CohereClient({
-    token: "MEjWAKX9UH75w4RPSZpSvJrziJbYDwREgEu5Qear",
-});
 
 const parseMealFromText = (text: string): { title: string; description: string } => {
     const [title, ...descriptionParts] = text.split(':').map(s => s.trim());
@@ -149,7 +143,10 @@ export async function PlanGenerator(): Promise<boolean> {
             return false;
         }
 
-        const prompt = `Create a detailed 7-day fitness plan for a ${userData.age}-year-old ${userData.gender} with BMI ${userData.bmi.toFixed(1)} (${userData.bmiCategory}). Goal: ${userData.mainGoal}. Training level: ${userData.trainingLevel}. Preferred activities: ${userData.activities.join(', ')}.
+        const bmi = userData.bmi ? userData.bmi.toFixed(1) : "Unknown";
+        const activities = Array.isArray(userData.activities) ? userData.activities.join(', ') : "None specified";
+
+        const prompt = `Create a detailed 7-day fitness plan for a ${userData.age || "Unknown"}-year-old ${userData.gender || "Unknown"} with BMI ${bmi} (${userData.bmiCategory || "Unknown"}). Goal: ${userData.mainGoal || "Unknown"}. Training level: ${userData.trainingLevel || "Unknown"}. Preferred activities: ${activities}.
 
         Format for each day:
         Day [1-7]:
@@ -167,14 +164,19 @@ export async function PlanGenerator(): Promise<boolean> {
 Include any necessary rest periods or additional information as separate items.
         `;
 
-        const response = await cohere.generate({
-            model: 'command',
-            prompt: prompt,
-            maxTokens: 100000,
-            temperature: 0.7,
+        const res = await fetch('/api/generate-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt }),
         });
 
-        const generatedText = response.generations[0].text;
+        if (!res.ok) {
+            const errData = await res.json();
+            throw new Error(errData.error || 'Failed to generate plan from API');
+        }
+
+        const data = await res.json();
+        const generatedText = data.text;
         const parsedPlan = parsePlanFromText(generatedText, email, userData.bmi);
         await saveFitnessPlan(email, parsedPlan);
 

@@ -58,13 +58,7 @@ export default function SignupPage() {
         try {
             const auth = getAuth(app);
 
-            // Check if email already exists
-            const methods = await fetchSignInMethodsForEmail(auth, email);
-            if (methods.length > 0) {
-                setError("Email already exists");
-                setIsLoading(false);
-                return;
-            }
+            // Just rely on createUserWithEmailAndPassword to throw if email exists
 
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -92,8 +86,8 @@ export default function SignupPage() {
             // Redirect to onboarding
             router.push("/login");
         } catch (error: any) {
-            console.error("Error signing up:", error);
-            setError("Email already exits");
+            console.error("Signup error:", error);
+            setError(error.code === 'auth/email-already-in-use' ? "Email already exists" : error.message || "An error occurred during sign up");
         } finally {
             setIsLoading(false);
         }
@@ -332,7 +326,7 @@ export default function SignupPage() {
                                             fill="#EA4335"
                                         />
                                     </svg>
-                                    Sign in with Google
+                                    Sign up with Google
                                 </Button>
                             </div>
                         </div>

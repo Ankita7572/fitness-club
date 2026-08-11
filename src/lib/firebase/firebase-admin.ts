@@ -8,9 +8,9 @@ export const firebaseApp =
   initializeApp(
     {
       credential: cert({
-        projectId:process.env.NEXT_PUBLIC_PROJECT_ID,
-        privateKey:process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        clientEmail:process.env.NEXT_PUBLIC_CLIENT_EMAIL,
+        projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+        privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
+        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
     
       }),
     },
